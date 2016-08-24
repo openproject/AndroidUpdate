@@ -1,0 +1,8 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.jayfeng.lesscode.update">
+
+    <application>
+        <service android:name="com.jayfeng.lesscode.core.UpdateService" />
+    </application>
+
+</manifest>
