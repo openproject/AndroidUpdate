@@ -240,8 +240,7 @@ public class UpdateService extends Service {
         public void run() {
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
                 if (mDestDir == null) {
-                    mDestDir = new File(Environment.getExternalStorageDirectory().getPath()
-                            + "/" + mDownloadSDPath);
+                    mDestDir = new File(Environment.getExternalStorageDirectory().getPath() + "/" + mDownloadSDPath);
                 }
 
                 if (mDestDir.exists() && !mDestDir.isDirectory()) {
@@ -249,24 +248,8 @@ public class UpdateService extends Service {
                 }
 
                 if (mDestDir.exists() || mDestDir.mkdirs()) {
-                    mDestFile = new File(mDestDir.getPath()
-                            + "/" + URLEncoder.encode(mDownloadUrl));
-
-                    if (mDestFile.exists()
-                            && mDestFile.isFile()
-                            && checkApkFile(mDestFile.getPath())) {
-                        sendMessage(DOWNLOAD_STATE_INSTALL);
-                        install(mDestFile);
-                    } else {
-                        try {
-                            sendMessage(DOWNLOAD_STATE_START);
-                            mIsDownloading = true;
-                            HttpLess.$download(mDownloadUrl, mDestFile, false, mDownloadCallBack);
-                        } catch (Exception e) {
-                            sendMessage(DOWNLOAD_STATE_FAILURE);
-                            e.printStackTrace();
-                        }
-                    }
+                    LogLess.$d("start download apk to sdcard download apk.");
+                    download();
                 } else {
                     sendMessage(DOWNLOAD_STATE_ERROR_FILE);
                 }
@@ -275,6 +258,26 @@ public class UpdateService extends Service {
             }
             mIsDownloading = false;
             stopSelf();
+        }
+
+        private void download() {
+            mDestFile = new File(mDestDir.getPath() + "/" + URLEncoder.encode(mDownloadUrl));
+
+            if (mDestFile.exists()
+                    && mDestFile.isFile()
+                    && checkApkFile(mDestFile.getPath())) {
+                sendMessage(DOWNLOAD_STATE_INSTALL);
+                install(mDestFile);
+            } else {
+                try {
+                    sendMessage(DOWNLOAD_STATE_START);
+                    mIsDownloading = true;
+                    HttpLess.$download(mDownloadUrl, mDestFile, false, mDownloadCallBack);
+                } catch (Exception e) {
+                    sendMessage(DOWNLOAD_STATE_FAILURE);
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }
