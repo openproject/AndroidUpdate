@@ -33,6 +33,7 @@ public class UpdateService extends Service {
     private static final int DOWNLOAD_STATE_INSTALL = 2;
     private static final int DOWNLOAD_STATE_ERROR_SDCARD = 3;
     private static final int DOWNLOAD_STATE_ERROR_URL = 4;
+    private static final int DOWNLOAD_STATE_ERROR_FILE = 5;
 
     private static final int NOTIFICATION_ID = 3956;
     private NotificationManager mNotificationManager = null;
@@ -69,6 +70,10 @@ public class UpdateService extends Service {
                     break;
                 case DOWNLOAD_STATE_ERROR_URL:
                     Toast.makeText(getApplicationContext(), R.string.less_app_download_error_url, Toast.LENGTH_LONG).show();
+                    break;
+                case DOWNLOAD_STATE_ERROR_FILE:
+                    Toast.makeText(getApplicationContext(), R.string.less_app_download_error_file, Toast.LENGTH_LONG).show();
+                    mNotificationManager.cancel(NOTIFICATION_ID);
                     break;
                 default:
                     break;
@@ -262,6 +267,8 @@ public class UpdateService extends Service {
                             e.printStackTrace();
                         }
                     }
+                } else {
+                    sendMessage(DOWNLOAD_STATE_ERROR_FILE);
                 }
             } else {
                 sendMessage(DOWNLOAD_STATE_ERROR_SDCARD);
