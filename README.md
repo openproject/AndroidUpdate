@@ -6,8 +6,15 @@ the best android check update library!
 ## Gradle
 
 ```groovy
-compile('com.jayfeng:lesscode-update:0.6.5');
+compile('com.jayfeng:lesscode-update:0.8');
 ```
+
+## Overview
+> * 一键集成，代码少，简单
+> * 稳定，考虑周全，经过商业验证
+> * 透明兼容Android7.0+
+> * 开源
+
 
 ## Author
 
