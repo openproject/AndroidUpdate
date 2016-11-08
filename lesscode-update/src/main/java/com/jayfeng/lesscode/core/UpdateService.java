@@ -216,7 +216,7 @@ public class UpdateService extends Service {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            uri = FileProvider.getUriForFile(this, "com.jayfeng.lesscode.update.fileprovider", apkFile);
+            uri = FileProvider.getUriForFile(this, getString(R.string.less_provider_file_authorities), apkFile);
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         } else {
             uri = Uri.fromFile(apkFile);

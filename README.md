@@ -6,15 +6,31 @@ the best android check update library!
 ## Gradle
 
 ```groovy
-compile('com.jayfeng:lesscode-update:0.8');
+compile('com.jayfeng:lesscode-update:0.8.1');
 ```
 
 ## Overview
 > * 一键集成，代码少，简单
 > * 稳定，考虑周全，经过商业验证
-> * 透明兼容Android7.0+
+> * 兼容Android7.0+
 > * 开源
 
+## Usage
+基本配置继承自LessCode：
+```groovy
+$.getInstance()
+    .update(null, 1, R.mipmap.ic_launcher)   // 自定义下载图标
+    .build();
+```
+为了兼容Android 7.0+的FileProvider，而Provider是不能冲突的，所以必须自定义这个Provider的author:
+```groovy
+android {
+    defaultConfig {
+        resValue "string", "less_provider_file_authorities", "<packageName>.fileprovider"
+    }
+}
+```
+切记！切记！一定要加！
 
 ## Author
 
