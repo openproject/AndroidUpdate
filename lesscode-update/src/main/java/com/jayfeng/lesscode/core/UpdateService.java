@@ -8,10 +8,12 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.RemoteViews;
@@ -93,7 +95,7 @@ public class UpdateService extends Service {
                 mCurrentProgress = progress;
                 mNotification.contentView.setProgressBar(R.id.less_app_update_progressbar, 100, progress, false);
                 mNotification.contentView.setTextViewText(R.id.less_app_update_progress_text, progress + "%");
-                LogLess.$d($.sTAG, "onDownloading:" + progress);
+                LogLess.$d("apk downloading progress:" + progress + "");
                 mNotificationManager.notify(NOTIFICATION_ID, mNotification);
             }
         }
@@ -210,9 +212,15 @@ public class UpdateService extends Service {
      * @param apkFile
      */
     private void install(File apkFile) {
-        Uri uri = Uri.fromFile(apkFile);
+        Uri uri;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            uri = FileProvider.getUriForFile(this, "com.jayfeng.lesscode.update.fileprovider", apkFile);
+        } else {
+            uri = Uri.fromFile(apkFile);
+        }
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.setDataAndType(uri, "application/vnd.android.package-archive");
         startActivity(intent);
     }
