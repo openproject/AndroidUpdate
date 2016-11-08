@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
-version = "0.6.3"                                                              // #CONFIG# // project version
+version = "0.5"                                                              // #CONFIG# // project version
 
 android {
     compileSdkVersion 24
@@ -28,7 +28,6 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.jayfeng:lesscode-core:0.9.7'
-    compile 'com.loopj.android:android-async-http:1.4.9'
 }
 
 def siteUrl = 'https://github.com/openproject/LessCode-Update'                        // #CONFIG# // project homepage

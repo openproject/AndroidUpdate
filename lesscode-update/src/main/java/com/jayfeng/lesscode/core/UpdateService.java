@@ -17,14 +17,10 @@ import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
-import com.jayfeng.lesscode.update.R;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.FileAsyncHttpResponseHandler;
-
 import java.io.File;
 import java.net.URLEncoder;
 
-import cz.msebera.android.httpclient.Header;
+import com.jayfeng.lesscode.update.R;
 
 /**
  * 检查更新后台下载服务
@@ -87,21 +83,18 @@ public class UpdateService extends Service {
     };
     private Handler mHandler = new Handler(mHandlerCallBack);
 
-    private DownloadCallBack mDownloadCallBack = new DownloadCallBack() {
+    private HttpLess.DownloadCallBack mDownloadCallBack = new HttpLess.DownloadCallBack() {
 
-        private int mCurrentProgress = 0;
-
+        @Override
         public void onDownloading(int progress) {
-
-            if ((progress != mCurrentProgress && progress % $.sNotificationFrequent == 0) || progress == 1 || progress == 100) {
-                mCurrentProgress = progress;
+            if (progress % $.sNotificationFrequent == 0 || progress == 1 || progress == 100) {
                 mNotification.contentView.setProgressBar(R.id.less_app_update_progressbar, 100, progress, false);
                 mNotification.contentView.setTextViewText(R.id.less_app_update_progress_text, progress + "%");
-                LogLess.$d($.sTAG, "onDownloading:" + progress);
                 mNotificationManager.notify(NOTIFICATION_ID, mNotification);
             }
         }
 
+        @Override
         public void onDownloaded() {
             mNotification.contentView.setViewVisibility(R.id.less_app_update_progress_block, View.GONE);
             mNotification.defaults = Notification.DEFAULT_SOUND;
@@ -113,15 +106,6 @@ public class UpdateService extends Service {
                 msg.what = DOWNLOAD_STATE_SUCCESS;
                 mHandler.sendMessage(msg);
             }
-            mNotificationManager.cancel(NOTIFICATION_ID);
-        }
-
-        @Override
-        public void onDownloadFail() {
-            Message msg = mHandler.obtainMessage();
-            msg.what = DOWNLOAD_STATE_FAILURE;
-            mHandler.sendMessage(msg);
-
             mNotificationManager.cancel(NOTIFICATION_ID);
         }
     };
@@ -188,7 +172,8 @@ public class UpdateService extends Service {
         mNotificationManager.cancel(NOTIFICATION_ID);
         mNotificationManager.notify(NOTIFICATION_ID, mNotification);
 
-        startToDownload();
+        // 启动线程开始下载
+        new UpdateThread().start();
 
         return super.onStartCommand(intent, flags, startId);
     }
@@ -246,75 +231,53 @@ public class UpdateService extends Service {
         mHandler.removeCallbacksAndMessages(null);
     }
 
-    private void startToDownload() {
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            if (mDestDir == null) {
-                mDestDir = new File(Environment.getExternalStorageDirectory().getPath() + "/" + mDownloadSDPath);
-            }
+    /**
+     * 下载线程
+     */
+    class UpdateThread extends Thread {
 
-            if (mDestDir.exists() && !mDestDir.isDirectory()) {
-                mDestDir.delete();
-            }
+        @Override
+        public void run() {
+            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                if (mDestDir == null) {
+                    mDestDir = new File(Environment.getExternalStorageDirectory().getPath() + "/" + mDownloadSDPath);
+                }
 
-            if (mDestDir.exists() || mDestDir.mkdirs()) {
-                LogLess.$d("start download apk to sdcard download apk.");
-                download();
+                if (mDestDir.exists() && !mDestDir.isDirectory()) {
+                    mDestDir.delete();
+                }
+
+                if (mDestDir.exists() || mDestDir.mkdirs()) {
+                    LogLess.$d("start download apk to sdcard download apk.");
+                    download();
+                } else {
+                    sendMessage(DOWNLOAD_STATE_ERROR_FILE);
+                }
             } else {
-                sendMessage(DOWNLOAD_STATE_ERROR_FILE);
+                sendMessage(DOWNLOAD_STATE_ERROR_SDCARD);
             }
-        } else {
-            sendMessage(DOWNLOAD_STATE_ERROR_SDCARD);
-        }
-    }
-
-    private void download() {
-        mDestFile = new File(mDestDir.getPath() + "/" + URLEncoder.encode(mDownloadUrl));
-
-        if (mDestFile.exists()
-                && mDestFile.isFile()
-                && checkApkFile(mDestFile.getPath())) {
-            sendMessage(DOWNLOAD_STATE_INSTALL);
-            install(mDestFile);
-
             mIsDownloading = false;
             stopSelf();
-        } else {
-                sendMessage(DOWNLOAD_STATE_START);
-                mIsDownloading = true;
-
-
-                AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
-                asyncHttpClient.get(mDownloadUrl, new FileAsyncHttpResponseHandler(mDestFile, true) {
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
-                        throwable.printStackTrace();
-                        mDownloadCallBack.onDownloadFail();
-
-                        mIsDownloading = false;
-                        stopSelf();
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, File file) {
-                        mDownloadCallBack.onDownloaded();
-
-                        mIsDownloading = false;
-                        stopSelf();
-                    }
-
-                    @Override
-                    public void onProgress(long bytesWritten, long totalSize) {
-                        super.onProgress(bytesWritten, totalSize);
-
-                        mDownloadCallBack.onDownloading((int)(bytesWritten * 100 / totalSize));
-                    }
-                });
         }
-    }
 
-    public interface DownloadCallBack {
-        void onDownloading(int progress);
-        void onDownloaded();
-        void onDownloadFail();
+        private void download() {
+            mDestFile = new File(mDestDir.getPath() + "/" + URLEncoder.encode(mDownloadUrl));
+
+            if (mDestFile.exists()
+                    && mDestFile.isFile()
+                    && checkApkFile(mDestFile.getPath())) {
+                sendMessage(DOWNLOAD_STATE_INSTALL);
+                install(mDestFile);
+            } else {
+                try {
+                    sendMessage(DOWNLOAD_STATE_START);
+                    mIsDownloading = true;
+                    HttpLess.$download(mDownloadUrl, mDestFile, false, mDownloadCallBack);
+                } catch (Exception e) {
+                    sendMessage(DOWNLOAD_STATE_FAILURE);
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }
