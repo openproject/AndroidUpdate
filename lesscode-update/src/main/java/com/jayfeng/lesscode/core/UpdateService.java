@@ -17,10 +17,10 @@ import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
+import com.jayfeng.lesscode.update.R;
+
 import java.io.File;
 import java.net.URLEncoder;
-
-import com.jayfeng.lesscode.update.R;
 
 /**
  * 检查更新后台下载服务
@@ -85,11 +85,15 @@ public class UpdateService extends Service {
 
     private HttpLess.DownloadCallBack mDownloadCallBack = new HttpLess.DownloadCallBack() {
 
+        private int mCurrentProgress = 0;
+
         @Override
         public void onDownloading(int progress) {
-            if (progress % $.sNotificationFrequent == 0 || progress == 1 || progress == 100) {
+            if ((progress != mCurrentProgress && progress % $.sNotificationFrequent == 0) || progress == 1 || progress == 100) {
+                mCurrentProgress = progress;
                 mNotification.contentView.setProgressBar(R.id.less_app_update_progressbar, 100, progress, false);
                 mNotification.contentView.setTextViewText(R.id.less_app_update_progress_text, progress + "%");
+                LogLess.$d($.sTAG, "onDownloading:" + progress);
                 mNotificationManager.notify(NOTIFICATION_ID, mNotification);
             }
         }
@@ -132,8 +136,7 @@ public class UpdateService extends Service {
         }
 
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            mDestDir = new File(Environment.getExternalStorageDirectory().getPath()
-                    + "/" + mDownloadSDPath);
+            mDestDir = new File(Environment.getExternalStorageDirectory().getPath() + "/" + mDownloadSDPath);
             if (mDestDir.exists()) {
                 File destFile = new File(mDestDir.getPath() + "/" + URLEncoder.encode(mDownloadUrl));
                 if (destFile.exists() && destFile.isFile() && checkApkFile(destFile.getPath())) {

@@ -1,5 +1,4 @@
 [![Jcenter Status](https://api.bintray.com/packages/openproject/maven/lesscode-update/images/download.svg)](https://bintray.com/openproject/maven/lesscode-update)
-[![MethodCount][methodcount-svg]][methodcount-link]
 
 # LessCode-Update
 the best android check update library!
@@ -7,7 +6,7 @@ the best android check update library!
 ## Gradle
 
 ```groovy
-compile('com.jayfeng:lesscode-update:0.6.3');
+compile('com.jayfeng:lesscode-update:0.6.5');
 ```
 
 ## Author
@@ -31,5 +30,3 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ```
-[methodcount-svg]: https://img.shields.io/badge/Methodscount-717-e91e63.svg
-[methodcount-link]: http://www.methodscount.com/?lib=com.jayfeng%3Alesscode-update%3A0.6.3
