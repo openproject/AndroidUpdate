@@ -13,10 +13,9 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
-import android.view.View;
-import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.jayfeng.lesscode.update.R;
@@ -39,7 +38,7 @@ public class UpdateService extends Service {
 
     private static final int NOTIFICATION_ID = 3956;
     private NotificationManager mNotificationManager = null;
-    private Notification mNotification = null;
+    private NotificationCompat.Builder mNotificationBuilder = null;
     private PendingIntent mPendingIntent = null;
 
     private String mDownloadSDPath;
@@ -48,6 +47,8 @@ public class UpdateService extends Service {
     private File mDestFile;
 
     private boolean mIsDownloading = false;
+
+    private String mAppName = "";
 
     private Handler.Callback mHandlerCallBack = new Handler.Callback() {
         @Override
@@ -93,20 +94,19 @@ public class UpdateService extends Service {
         public void onDownloading(int progress) {
             if ((progress != mCurrentProgress && progress % $.sNotificationFrequent == 0) || progress == 1 || progress == 100) {
                 mCurrentProgress = progress;
-                mNotification.contentView.setProgressBar(R.id.less_app_update_progressbar, 100, progress, false);
-                mNotification.contentView.setTextViewText(R.id.less_app_update_progress_text, progress + "%");
+                mNotificationBuilder.setProgress(100, progress, false);
+                mNotificationBuilder.setContentText(getString(R.string.less_app_download_ongoing) + progress + "%");
                 LogLess.$d("apk downloading progress:" + progress + "");
-                mNotificationManager.notify(NOTIFICATION_ID, mNotification);
+                mNotificationManager.notify(NOTIFICATION_ID, mNotificationBuilder.build());
             }
         }
 
         @Override
         public void onDownloaded() {
-            mNotification.contentView.setViewVisibility(R.id.less_app_update_progress_block, View.GONE);
-            mNotification.defaults = Notification.DEFAULT_SOUND;
-            mNotification.contentIntent = mPendingIntent;
-            mNotification.contentView.setTextViewText(R.id.less_app_update_progress_text, getText(R.string.less_app_download_notification_success));
-            mNotificationManager.notify(NOTIFICATION_ID, mNotification);
+            mNotificationBuilder.setContentText(getString(R.string.less_app_download_notification_success));
+            mNotificationBuilder.setProgress(0, 0, false);
+            mNotificationBuilder.setDefaults(Notification.DEFAULT_ALL);
+            mNotificationManager.notify(NOTIFICATION_ID, mNotificationBuilder.build());
             if (mDestFile.exists() && mDestFile.isFile() && checkApkFile(mDestFile.getPath())) {
                 Message msg = mHandler.obtainMessage();
                 msg.what = DOWNLOAD_STATE_SUCCESS;
@@ -154,28 +154,26 @@ public class UpdateService extends Service {
             return super.onStartCommand(intent, flags, startId);
         }
 
-        mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        mNotification = new Notification();
+        mAppName = AppLess.$appname();
 
-        mNotification.contentView = new RemoteViews(getApplication().getPackageName(), R.layout.less_app_update_notification);
+        mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        mNotificationBuilder = new NotificationCompat.Builder(this);
+
+        mNotificationBuilder.setSmallIcon($.sUpdateIcon != 0 ? $.sUpdateIcon : R.drawable.less_app_update_icon);
+        mNotificationBuilder.setContentTitle(mAppName);
+        mNotificationBuilder.setContentText(getString(R.string.less_app_download_start));
+        mNotificationBuilder.setProgress(100, 0, false);
+        mNotificationBuilder.setAutoCancel(true);
 
         Intent completingIntent = new Intent();
         completingIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         completingIntent.setClass(getApplicationContext(), UpdateService.class);
-
         mPendingIntent = PendingIntent.getActivity(UpdateService.this, R.string.less_app_name, completingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        mNotification.icon = $.sUpdateIcon != 0 ? $.sUpdateIcon : R.drawable.less_app_update_icon;
-        mNotification.tickerText = getText(R.string.less_app_download_notification_start);
-        mNotification.contentIntent = mPendingIntent;
-        mNotification.contentView.setTextViewText(R.id.less_app_update_title, AppLess.$appname());
-        mNotification.contentView.setProgressBar(R.id.less_app_update_progressbar, 100, 0, false);
-        mNotification.contentView.setTextViewText(R.id.less_app_update_progress_text, "0%");
-        if ($.sUpdateIcon != 0) {
-            mNotification.contentView.setImageViewResource(R.id.less_app_update_progress_icon, $.sUpdateIcon);
-        }
+        mNotificationBuilder.setContentIntent(mPendingIntent);
+
         mNotificationManager.cancel(NOTIFICATION_ID);
-        mNotificationManager.notify(NOTIFICATION_ID, mNotification);
+        mNotificationManager.notify(NOTIFICATION_ID, mNotificationBuilder.build());
 
         // 启动线程开始下载
         new UpdateThread().start();
