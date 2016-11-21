@@ -1,15 +1,25 @@
 package com.jayfeng.lesscode.update.app;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 
+import com.jayfeng.lesscode.core.FileLess;
+import com.jayfeng.lesscode.core.ToastLess;
 import com.jayfeng.lesscode.core.UpdateLess;
+import com.jayfeng.lesscode.core.ViewLess;
+
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Button mCheckButton;
+    private Button mClearButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +37,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mCheckButton = ViewLess.$(this, R.id.check);
+        mClearButton = ViewLess.$(this, R.id.clear);
 
+        mCheckButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                check();
+            }
+        });
+
+        mClearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clear();
+
+                ToastLess.$("清除成功");
+            }
+        });
+    }
+
+    private void check() {
         String updateJson = "{\n" +
                 "      \"vercode\":112,\n" +
                 "      \"vername\":\"V1.1\",\n" +
@@ -35,6 +65,12 @@ public class MainActivity extends AppCompatActivity {
                 "      \"log\":\"upgrade content\"\n" +
                 "      }";
         UpdateLess.$check(this, updateJson);
+    }
+
+    private void clear() {
+        FileLess.$del(getCacheDir());
+        FileLess.$del(getExternalCacheDir());
+        FileLess.$del(new File(Environment.getExternalStorageDirectory(), getPackageName()), true);
     }
 
 }

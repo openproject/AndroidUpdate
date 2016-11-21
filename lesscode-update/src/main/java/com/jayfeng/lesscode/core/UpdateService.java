@@ -92,7 +92,7 @@ public class UpdateService extends Service {
 
         @Override
         public void onDownloading(int progress) {
-            if ((progress != mCurrentProgress && progress % $.sNotificationFrequent == 0) || progress == 1 || progress == 100) {
+            if (progress != mCurrentProgress || progress == 100) {
                 mCurrentProgress = progress;
                 mNotificationBuilder.setProgress(100, progress, false);
                 mNotificationBuilder.setContentText(getString(R.string.less_app_download_ongoing) + progress + "%");

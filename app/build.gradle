@@ -2,13 +2,15 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.0"
+    buildToolsVersion "24.0.3"
     defaultConfig {
         applicationId "com.jayfeng.lesscode.update.app"
         minSdkVersion 15
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
+
+        resValue "string", "less_provider_file_authorities", "com.jayfeng.lesscode.update.app.fileprovider"
     }
     buildTypes {
         release {

@@ -21,6 +21,19 @@ import com.jayfeng.lesscode.update.R;
  */
 public final class UpdateLess {
 
+    public static String sDownloadSDPath;
+    public static int sUpdateIcon;
+
+    /**
+     * 配置下载路径和通知栏图标
+     * @param downloadSDPath
+     * @param updateIcon
+     */
+    public static void $config(String downloadSDPath, int updateIcon) {
+        sDownloadSDPath = downloadSDPath;
+        sUpdateIcon = updateIcon;
+    }
+
     /**
      * 解析json和本地信息比较,判断是否有更新
      *
