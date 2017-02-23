@@ -134,7 +134,7 @@ public class UpdateService extends Service {
 
         if (TextUtils.isEmpty(mDownloadUrl)) {
             sendMessage(DOWNLOAD_STATE_ERROR_URL);
-            return super.onStartCommand(intent, flags, startId);
+            return super.onStartCommand(intent, Service.START_FLAG_REDELIVERY, startId);
         }
 
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
@@ -146,12 +146,12 @@ public class UpdateService extends Service {
                     sendMessage(DOWNLOAD_STATE_INSTALL);
                     install(destFile);
                     stopSelf();
-                    return super.onStartCommand(intent, flags, startId);
+                    return super.onStartCommand(intent, Service.START_FLAG_REDELIVERY, startId);
                 }
             }
         } else {
             sendMessage(DOWNLOAD_STATE_ERROR_SDCARD);
-            return super.onStartCommand(intent, flags, startId);
+            return super.onStartCommand(intent, Service.START_FLAG_REDELIVERY, startId);
         }
 
         mAppName = AppLess.$appname();
@@ -178,7 +178,7 @@ public class UpdateService extends Service {
         // 启动线程开始下载
         new UpdateThread().start();
 
-        return super.onStartCommand(intent, flags, startId);
+        return super.onStartCommand(intent, Service.START_FLAG_REDELIVERY, startId);
     }
 
     /**
