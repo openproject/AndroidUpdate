@@ -89,11 +89,15 @@ public class UpdateService extends Service {
 
     private Http.DownloadCallBack mDownloadCallBack = new Http.DownloadCallBack() {
 
+        private int NOTIFICATION_INTERVAL_MIN = 160;
+        private long mCurrentTime = 0;
         private int mCurrentProgress = 0;
 
         @Override
         public void onDownloading(int progress) {
-            if (progress != mCurrentProgress || progress == 100) {
+            if ((progress != mCurrentProgress && System.currentTimeMillis() - mCurrentTime > NOTIFICATION_INTERVAL_MIN)
+                    || progress == 100) {
+                mCurrentTime = System.currentTimeMillis();
                 mCurrentProgress = progress;
                 mNotificationBuilder.setProgress(100, progress, false);
                 mNotificationBuilder.setContentText(getString(R.string.less_app_download_ongoing) + progress + "%");
