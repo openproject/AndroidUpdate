@@ -19,26 +19,26 @@ public final class Http {
 
     /**
      * 异步下载文件
-     * @param downloadUrl
-     * @param dest
-     * @param append
-     * @param callBack
-     * @return
-     * @throws Exception
+     * @param downloadUrl downloadUrl
+     * @param dest dest
+     * @param append append
+     * @param callback callback
+     * @return return
+     * @throws Exception Exception
      */
-    public static long download(String downloadUrl, File dest, boolean append, DownloadCallBack callBack) throws Exception {
-        return download(downloadUrl, dest, append, new ContentValues(), callBack);
+    public static long download(String downloadUrl, File dest, boolean append, DownloadCallBack callback) throws Exception {
+        return download(downloadUrl, dest, append, new ContentValues(), callback);
     }
 
     /**
      * 异步下载文件,支持自定义Header
-     * @param downloadUrl
-     * @param dest
-     * @param append
-     * @param header
-     * @param callBack
-     * @return
-     * @throws Exception
+     * @param downloadUrl downloadUrl
+     * @param dest dest
+     * @param append append
+     * @param header header
+     * @param callBack callBack
+     * @return return
+     * @throws Exception Exception
      */
     public static long download(String downloadUrl, File dest, boolean append, ContentValues header, DownloadCallBack callBack) throws Exception {
         int progress = 0;

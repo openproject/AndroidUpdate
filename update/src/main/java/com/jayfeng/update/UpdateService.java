@@ -189,8 +189,8 @@ public class UpdateService extends Service {
     /**
      * validate the apk file
      *
-     * @param apkFilePath
-     * @return
+     * @param apkFilePath apkFilePath
+     * @return return
      */
     public boolean checkApkFile(String apkFilePath) {
         boolean result;
@@ -217,7 +217,7 @@ public class UpdateService extends Service {
     private void install(File apkFile) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        Uri uri;
+        Uri uri = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             uri = FileProvider.getUriForFile(this, getString(R.string.less_provider_file_authorities), apkFile);
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);

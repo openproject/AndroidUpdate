@@ -14,5 +14,11 @@
     <string name="less_app_download_error_url">下载地址错误，无法下载。</string>
     <string name="less_app_download_error_file">创建文件失败，请检查存储空间权限。</string>
 
-    <string name="less_provider_file_authorities">com.jayfeng.lesscode.update.fileprovider</string>
+    <string name="less_provider_file_authorities">com.jayfeng.update.fileprovider</string>
+
+    <!-- runtime permission -->
+    <string name="permission_deny_title">没有权限</string>
+    <string name="permission_deny_message">您拒绝了访问存储卡权限导致无法下载APP，请在设置中授权后再试！</string>
+    <string name="permission_deny_cancel">取消</string>
+    <string name="permission_deny_ok">去设置</string>
 </resources>
