@@ -15,3 +15,10 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+-keepclassmembers class ** {
+    @com.yanzhenjie.permission.PermissionYes <methods>;
+}
+-keepclassmembers class ** {
+    @com.yanzhenjie.permission.PermissionNo <methods>;
+}

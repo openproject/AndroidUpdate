@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">LessCode-Update</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">检查更新</string>
 </resources>

@@ -14,6 +14,9 @@ import com.jayfeng.lesscode.core.ToastLess;
 import com.jayfeng.lesscode.core.ViewLess;
 import com.jayfeng.update.UpdateManager;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
@@ -55,7 +58,24 @@ public class MainActivity extends AppCompatActivity {
                 "      \"download\":\"http://www.apk.anzhi.com/data3/apk/201506/09/3a978f27369b4a8bf6de1270da9871ec_86281300.apk\",\n" +
                 "      \"log\":\"upgrade content\"\n" +
                 "      }";
-        UpdateManager.check(this, updateJson);
+
+        int vercode = 0;
+        String vername = "";
+        String log = "";
+        String download = null;
+
+        JSONObject jsonObject;
+        try {
+            jsonObject = new JSONObject(updateJson);
+            vercode = jsonObject.optInt("vercode");
+            vername = jsonObject.optString("vername");
+            download = jsonObject.optString("download");
+            log = jsonObject.optString("log");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        UpdateManager.show(this, vercode, vername, download, log);
     }
 
     private void clear() {

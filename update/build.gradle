@@ -9,7 +9,7 @@ android {
     buildToolsVersion "26.0.0"
 
     defaultConfig {
-        minSdkVersion 9
+        minSdkVersion 15
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -28,6 +28,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.yanzhenjie:permission:1.0.8'
 }
 
 def siteUrl = 'https://github.com/openproject/LessCode-Update'                        // #CONFIG# // project homepage

@@ -1,4 +1,4 @@
-[![Jcenter Status](https://api.bintray.com/packages/openproject/maven/lesscode-update/images/download.svg)](https://bintray.com/openproject/maven/lesscode-update)
+[![Jcenter Status](https://api.bintray.com/packages/openproject/maven/update/images/download.svg)](https://bintray.com/openproject/maven/update)
 
 # LessCode-Update
 the best android check update library!

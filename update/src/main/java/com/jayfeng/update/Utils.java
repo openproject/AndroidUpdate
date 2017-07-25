@@ -1,6 +1,8 @@
 package com.jayfeng.update;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -59,5 +61,20 @@ public class Utils {
             }
         }
         return strbuffer.toString();
+    }
+
+    public static Activity getActivityFromContext(Context context) {
+
+        if (context == null) {
+            return null;
+        }
+
+        if (context instanceof Activity)
+            return (Activity) context;
+        else if (context instanceof ContextWrapper) {
+            return getActivityFromContext(((ContextWrapper) context).getBaseContext());
+        }
+
+        return null;
     }
 }
