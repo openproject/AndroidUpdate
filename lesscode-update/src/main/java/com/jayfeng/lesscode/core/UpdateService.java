@@ -24,7 +24,7 @@ import java.io.File;
 import java.net.URLEncoder;
 
 /**
- * 检查更新后台下载服务
+ * update service for downloading apk
  */
 public class UpdateService extends Service {
 
@@ -175,14 +175,14 @@ public class UpdateService extends Service {
         mNotificationManager.cancel(NOTIFICATION_ID);
         mNotificationManager.notify(NOTIFICATION_ID, mNotificationBuilder.build());
 
-        // 启动线程开始下载
+        // start the download thread
         new UpdateThread().start();
 
         return super.onStartCommand(intent, Service.START_FLAG_REDELIVERY, startId);
     }
 
     /**
-     * 检查apk文件是否有效(是正确下载,没有损坏的)
+     * validate the apk file
      *
      * @param apkFilePath
      * @return
@@ -205,7 +205,7 @@ public class UpdateService extends Service {
     }
 
     /**
-     * 调用系统Intent安装apk包
+     * start system intent to install apk
      *
      * @param apkFile
      */
@@ -241,7 +241,7 @@ public class UpdateService extends Service {
     }
 
     /**
-     * 下载线程
+     * download thread
      */
     class UpdateThread extends Thread {
 

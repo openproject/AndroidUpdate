@@ -11,7 +11,7 @@ import org.json.JSONObject;
 import com.jayfeng.lesscode.update.R;
 
 /**
- * 检查更新工具类
+ * check update util
  * {
  * "vercode":1,
  * "vername":"v1.1",
@@ -25,7 +25,7 @@ public final class UpdateLess {
     public static int sUpdateIcon;
 
     /**
-     * 配置下载路径和通知栏图标
+     * config the download path and notification icon
      * @param downloadSDPath
      * @param updateIcon
      */
@@ -35,7 +35,8 @@ public final class UpdateLess {
     }
 
     /**
-     * 解析json和本地信息比较,判断是否有更新
+     * check to update by version code
+     * which parse form the updateJson
      *
      * @return 有更新则返回true, 否则返回false
      */
@@ -61,7 +62,7 @@ public final class UpdateLess {
     }
 
     /**
-     * 根据解析的结果来比较是否有更新
+     * check to update by version code
      *
      * @param context
      * @param vercode
@@ -75,12 +76,12 @@ public final class UpdateLess {
                                  String vername,
                                  final String download,
                                  String log) {
-        // 无更新
+        // no update
         if (!$hasUpdate(vercode)) {
             return false;
         }
 
-        // 有更新,则弹出对话框告知用户
+        // if has update, show to dialog with update log
         new AlertDialog.Builder(context)
                 .setTitle(context.getString(R.string.less_app_download_dialog_title) + vername)
                 .setMessage(log)
@@ -98,7 +99,7 @@ public final class UpdateLess {
     }
 
     /**
-     * 根据版本判断是否有更新
+     * if has update by version code
      *
      * @param vercode
      * @return
@@ -111,7 +112,7 @@ public final class UpdateLess {
     }
 
     /**
-     * 启动下载服务,开始下载APK文件
+     * start update service to download apk
      *
      * @param context
      * @param download
