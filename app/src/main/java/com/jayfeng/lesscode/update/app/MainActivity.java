@@ -11,8 +11,8 @@ import android.widget.Button;
 
 import com.jayfeng.lesscode.core.FileLess;
 import com.jayfeng.lesscode.core.ToastLess;
-import com.jayfeng.lesscode.core.UpdateLess;
 import com.jayfeng.lesscode.core.ViewLess;
+import com.jayfeng.update.UpdateManager;
 
 import java.io.File;
 
@@ -27,15 +27,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         mCheckButton = ViewLess.$(this, R.id.check);
         mClearButton = ViewLess.$(this, R.id.clear);
@@ -64,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
                 "      \"download\":\"http://www.apk.anzhi.com/data3/apk/201506/09/3a978f27369b4a8bf6de1270da9871ec_86281300.apk\",\n" +
                 "      \"log\":\"upgrade content\"\n" +
                 "      }";
-        UpdateLess.$check(this, updateJson);
+        UpdateManager.check(this, updateJson);
     }
 
     private void clear() {

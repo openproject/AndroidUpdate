@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.jayfeng.lesscode.update">
+    package="com.jayfeng.update">
 
     <application>
-        <service android:name="com.jayfeng.lesscode.core.UpdateService" />
+        <service android:name="com.jayfeng.update.UpdateService" />
         <provider
             android:authorities="@string/less_provider_file_authorities"
             android:name="android.support.v4.content.FileProvider"

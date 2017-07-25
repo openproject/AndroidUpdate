@@ -1,4 +1,4 @@
-package com.jayfeng.lesscode.core;
+package com.jayfeng.update;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -16,9 +16,8 @@ import android.os.Message;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
-
-import com.jayfeng.lesscode.update.R;
 
 import java.io.File;
 import java.net.URLEncoder;
@@ -27,6 +26,8 @@ import java.net.URLEncoder;
  * update service for downloading apk
  */
 public class UpdateService extends Service {
+
+    public static final String TAG = "UpdateService";
 
     private static final int DOWNLOAD_STATE_FAILURE = -1;
     private static final int DOWNLOAD_STATE_SUCCESS = 0;
@@ -86,7 +87,7 @@ public class UpdateService extends Service {
     };
     private Handler mHandler = new Handler(mHandlerCallBack);
 
-    private HttpLess.DownloadCallBack mDownloadCallBack = new HttpLess.DownloadCallBack() {
+    private Http.DownloadCallBack mDownloadCallBack = new Http.DownloadCallBack() {
 
         private int mCurrentProgress = 0;
 
@@ -96,7 +97,7 @@ public class UpdateService extends Service {
                 mCurrentProgress = progress;
                 mNotificationBuilder.setProgress(100, progress, false);
                 mNotificationBuilder.setContentText(getString(R.string.less_app_download_ongoing) + progress + "%");
-                LogLess.$d("apk downloading progress:" + progress + "");
+                Log.d(TAG, "apk downloading progress:" + progress + "");
                 mNotificationManager.notify(NOTIFICATION_ID, mNotificationBuilder.build());
             }
         }
@@ -121,15 +122,15 @@ public class UpdateService extends Service {
 
         // check downloading state
         if (mIsDownloading) {
-            ToastLess.$(this, R.string.less_app_download_downloading);
+            Toast.makeText(this, R.string.less_app_download_downloading, Toast.LENGTH_SHORT).show();
             return super.onStartCommand(intent, flags, startId);
         }
 
-        mDownloadUrl = intent.getStringExtra($.KEY_DOWNLOAD_URL);
-        if (TextUtils.isEmpty($.sDownloadSDPath)) {
+        mDownloadUrl = intent.getStringExtra(UpdateManager.KEY_DOWNLOAD_URL);
+        if (TextUtils.isEmpty(UpdateManager.sDownloadSDPath)) {
             mDownloadSDPath = getPackageName() + "/download";
         } else {
-            mDownloadSDPath = $.sDownloadSDPath;
+            mDownloadSDPath = UpdateManager.sDownloadSDPath;
         }
 
         if (TextUtils.isEmpty(mDownloadUrl)) {
@@ -154,12 +155,12 @@ public class UpdateService extends Service {
             return super.onStartCommand(intent, Service.START_FLAG_REDELIVERY, startId);
         }
 
-        mAppName = AppLess.$appname();
+        mAppName = Utils.appname(this);
 
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotificationBuilder = new NotificationCompat.Builder(this);
 
-        mNotificationBuilder.setSmallIcon($.sUpdateIcon != 0 ? $.sUpdateIcon : R.drawable.less_app_update_icon);
+        mNotificationBuilder.setSmallIcon(UpdateManager.sUpdateIcon != 0 ? UpdateManager.sUpdateIcon : R.drawable.less_app_update_icon);
         mNotificationBuilder.setContentTitle(mAppName);
         mNotificationBuilder.setContentText(getString(R.string.less_app_download_start));
         mNotificationBuilder.setProgress(100, 0, false);
@@ -257,7 +258,7 @@ public class UpdateService extends Service {
                 }
 
                 if (mDestDir.exists() || mDestDir.mkdirs()) {
-                    LogLess.$d("start download apk to sdcard download apk.");
+                    Log.d(TAG, "start download apk to sdcard download apk.");
                     download();
                 } else {
                     sendMessage(DOWNLOAD_STATE_ERROR_FILE);
@@ -281,7 +282,7 @@ public class UpdateService extends Service {
                 try {
                     sendMessage(DOWNLOAD_STATE_START);
                     mIsDownloading = true;
-                    HttpLess.$download(mDownloadUrl, mDestFile, false, mDownloadCallBack);
+                    Http.download(mDownloadUrl, mDestFile, false, mDownloadCallBack);
                 } catch (Exception e) {
                     sendMessage(DOWNLOAD_STATE_FAILURE);
                     e.printStackTrace();

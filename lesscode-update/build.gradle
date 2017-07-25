@@ -27,7 +27,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.jayfeng:lesscode-core:1.0'
+    compile 'com.android.support:appcompat-v7:25.3.1'
 }
 
 def siteUrl = 'https://github.com/openproject/LessCode-Update'                        // #CONFIG# // project homepage
@@ -102,7 +102,7 @@ bintray {
     configurations = ['archives']
     pkg {
         repo = "maven"
-        name = "lesscode-update"                                                 // #CONFIG# project name in jcenter
+        name = "update"                                                 // #CONFIG# project name in jcenter
         websiteUrl = siteUrl
         vcsUrl = gitUrl
         licenses = ["Apache-2.0"]

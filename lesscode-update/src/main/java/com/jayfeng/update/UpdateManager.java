@@ -1,4 +1,4 @@
-package com.jayfeng.lesscode.core;
+package com.jayfeng.update;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -7,8 +7,6 @@ import android.content.Intent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.jayfeng.lesscode.update.R;
 
 /**
  * check update util
@@ -19,8 +17,11 @@ import com.jayfeng.lesscode.update.R;
  * "log":"upgrade content"
  * }
  */
-public final class UpdateLess {
+public final class UpdateManager {
 
+    public static final String KEY_DOWNLOAD_URL = "download_url";
+
+    public static Context sContext;
     public static String sDownloadSDPath;
     public static int sUpdateIcon;
 
@@ -29,7 +30,8 @@ public final class UpdateLess {
      * @param downloadSDPath
      * @param updateIcon
      */
-    public static void $config(String downloadSDPath, int updateIcon) {
+    public static void init(Context context, String downloadSDPath, int updateIcon) {
+        sContext = context;
         sDownloadSDPath = downloadSDPath;
         sUpdateIcon = updateIcon;
     }
@@ -40,7 +42,7 @@ public final class UpdateLess {
      *
      * @return 有更新则返回true, 否则返回false
      */
-    public static boolean $check(final Context context, String updateJson) {
+    public static boolean check(final Context context, String updateJson) {
         int vercode = 0;
         String vername = "";
         String log = "";
@@ -58,7 +60,7 @@ public final class UpdateLess {
             return false;
         }
 
-        return $check(context, vercode, vername, download, log);
+        return check(context, vercode, vername, download, log);
     }
 
     /**
@@ -71,13 +73,13 @@ public final class UpdateLess {
      * @param log
      * @return
      */
-    public static boolean $check(final Context context,
+    public static boolean check(final Context context,
                                  int vercode,
                                  String vername,
                                  final String download,
                                  String log) {
         // no update
-        if (!$hasUpdate(vercode)) {
+        if (!hasUpdate(vercode)) {
             return false;
         }
 
@@ -90,7 +92,7 @@ public final class UpdateLess {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent = new Intent(context, UpdateService.class);
-                        intent.putExtra($.KEY_DOWNLOAD_URL, download);
+                        intent.putExtra(KEY_DOWNLOAD_URL, download);
                         context.startService(intent);
                     }
                 }).show();
@@ -104,8 +106,8 @@ public final class UpdateLess {
      * @param vercode
      * @return
      */
-    public static boolean $hasUpdate(int vercode) {
-        if (vercode <= AppLess.$vercode()) {
+    public static boolean hasUpdate(int vercode) {
+        if (vercode <= Utils.vercode(sContext)) {
             return false;
         }
         return true;
@@ -117,9 +119,9 @@ public final class UpdateLess {
      * @param context
      * @param download
      */
-    public static void $download(Context context, String download) {
+    public static void download(Context context, String download) {
         Intent intent = new Intent(context, UpdateService.class);
-        intent.putExtra($.KEY_DOWNLOAD_URL, download);
+        intent.putExtra(KEY_DOWNLOAD_URL, download);
         context.startService(intent);
     }
 }

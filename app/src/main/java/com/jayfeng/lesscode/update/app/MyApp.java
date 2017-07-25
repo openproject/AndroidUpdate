@@ -3,7 +3,7 @@ package com.jayfeng.lesscode.update.app;
 import android.app.Application;
 
 import com.jayfeng.lesscode.core.$;
-import com.jayfeng.lesscode.core.UpdateLess;
+import com.jayfeng.update.UpdateManager;
 
 public class MyApp extends Application {
 
@@ -11,13 +11,13 @@ public class MyApp extends Application {
     public void onCreate() {
         super.onCreate();
 
-        // LessCode初始化 - 必须
         $.getInstance()
                 .context(getApplicationContext())
-                .log(BuildConfig.DEBUG, "LESSCODE-UPDATE")
+                .log(BuildConfig.DEBUG, "update")
                 .build();
 
-        // UpdateLess初始化 - 必须
-        UpdateLess.$config(null, R.mipmap.ic_launcher);
+        // UpdateManager init - MUST
+        UpdateManager.init(getApplicationContext(),
+                null, R.mipmap.ic_launcher);
     }
 }
