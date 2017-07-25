@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
-version = "1.1"                                                              // #CONFIG# // project version
+version = "2.0"                                                              // #CONFIG# // project version
 
 android {
     compileSdkVersion 26
@@ -32,7 +32,7 @@ dependencies {
 
 def siteUrl = 'https://github.com/openproject/LessCode-Update'                        // #CONFIG# // project homepage
 def gitUrl = 'https://github.com/openproject/LessCode-Update.git'                     // #CONFIG# // project git
-group = "com.jayfeng"                                                          // #CONFIG# // Maven Group ID for the artifact (pageckage name is ok)
+group = "com.jayfeng"                                                                 // #CONFIG# // Maven Group ID for the artifact (pageckage name is ok)
 
 install {
     repositories.mavenInstaller {
@@ -40,7 +40,7 @@ install {
         pom {
             project {
                 packaging 'aar'
-                name 'Less Code On Update For Android'                                   // #CONFIG# // project title
+                name 'Check Update For Android'                                       // #CONFIG# // project title
                 url siteUrl
                 // Set your license
                 licenses {

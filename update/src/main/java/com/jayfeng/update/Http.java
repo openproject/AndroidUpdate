@@ -73,11 +73,10 @@ public final class Http {
             conn.setConnectTimeout(HTTP_CONNECT_TIMEOUT);
             conn.setReadTimeout(HTTP_READ_TIMEOUT);
             conn.setRequestMethod("GET");
-            // 设置断点续传的起始位置
             if (currentSize > 0) {
                 conn.setRequestProperty("RANGE", "bytes=" + currentSize + "-");
             }
-            // 自定义header
+            // customize header
             for (Map.Entry<String, Object> entry : header.valueSet()) {
                 String key = entry.getKey();
                 String value = entry.getValue().toString();
@@ -85,7 +84,7 @@ public final class Http {
             }
             if (conn.getResponseCode() == HttpURLConnection.HTTP_MOVED_PERM
                     || conn.getResponseCode()== HttpURLConnection.HTTP_MOVED_TEMP) {
-                // 重定向地址下载
+                // redirect to new location
                 String redirectDownloadUrl = conn.getHeaderField("location");
                 return download(redirectDownloadUrl, dest, append, header, callBack);
             } else if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
@@ -102,7 +101,7 @@ public final class Http {
                     os.write(buffer, 0, readSize);
                     os.flush();
                     totalSize += readSize;
-                    // 通知回调下载进度
+                    // callback the download progress
                     if (callBack != null) {
                         progress = (int) (totalSize * 100 / remoteSize);
                         callBack.onDownloading(progress);
@@ -132,7 +131,7 @@ public final class Http {
             throw new Exception("Download file fail: " + downloadUrl);
         }
 
-        // 下载完成并通知回调
+        // downloaded callback
         if (callBack != null) {
             callBack.onDownloaded();
         }
@@ -141,8 +140,7 @@ public final class Http {
     }
 
     /**
-     * 下载回调:下载进度和下载完成
-     * onDownloading,带一个进度值:0~100
+     * onDownloading progress (0-100)
      * onDownloaded
      */
     public interface DownloadCallBack {
