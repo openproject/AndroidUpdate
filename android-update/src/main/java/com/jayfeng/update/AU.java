@@ -33,6 +33,7 @@ public final class AU {
 
     public static final int STYLE_MATERIAL_DESIGN = 1;
     public static final int STYLE_CORNER_CENTER = 2;
+    public static final int STYLE_CORNER_BOTTOM = 3;
 
     public static AUConfig sAUConfig;
 
@@ -86,6 +87,8 @@ public final class AU {
             show(context, vercode, vername, download, log);
         } else if (style == STYLE_CORNER_CENTER) {
             showCornerCenter(context, vercode, vername, download, log);
+        } else if (style == STYLE_CORNER_BOTTOM) {
+            showCornerBottom(context, vercode, vername, download, log);
         }
     }
 

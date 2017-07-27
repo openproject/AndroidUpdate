@@ -18,14 +18,16 @@ compile('com.jayfeng:android-update:2.2');
 ## Usage
 ```groovy
     // 自定义下载路径和通知图标
-    // UpdateManager.init(Context context, String downloadSDPath, int updateIcon);
-    UpdateManager.init(context, null, R.mipmap.ic_launcher);
+    AUConfig auConfig = new AUConfig();
+    auConfig.setContext(getApplicationContext());
+    auConfig.setUpdateIcon(R.mipmap.ic_launcher);
+    AU.init(auConfig);
 ```
 为了兼容Android 7.0+的FileProvider，而Provider是不能冲突的，所以必须自定义这个Provider的author:
 ```groovy
 android {
     defaultConfig {
-        resValue "string", "less_provider_file_authorities", "<packageName>.fileprovider"
+        resValue "string", "au_provider_file_authorities", "<packageName>.fileprovider"
     }
 }
 ```
