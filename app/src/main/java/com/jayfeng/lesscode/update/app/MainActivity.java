@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        AU.showCornerCenter(this, vercode, vername, download, log);
+        AU.showCornerBottom(this, vercode, vername, download, log);
     }
 
     private void clear() {

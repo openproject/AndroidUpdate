@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.jayfeng.lesscode.core.$;
 import com.jayfeng.update.AU;
+import com.jayfeng.update.AUConfig;
 
 public class MyApp extends Application {
 
@@ -17,7 +18,9 @@ public class MyApp extends Application {
                 .build();
 
         // UpdateManager init - MUST
-        AU.init(getApplicationContext(),
-                null, R.mipmap.ic_launcher);
+        AUConfig auConfig = new AUConfig();
+        auConfig.setContext(getApplicationContext());
+        auConfig.setUpdateIcon(R.mipmap.ic_launcher);
+        AU.init(auConfig);
     }
 }

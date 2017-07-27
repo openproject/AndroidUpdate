@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.jayfeng.update.ui.AUCornerBottomDialog;
 import com.jayfeng.update.ui.AUCornerCenterDialog;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionListener;
@@ -27,26 +28,21 @@ import java.util.List;
 public final class AU {
 
     public static final String KEY_DOWNLOAD_URL = "download_url";
+
     public static final int REQUEST_CODE = 3423;
 
     public static final int STYLE_MATERIAL_DESIGN = 1;
     public static final int STYLE_CORNER_CENTER = 2;
 
-    public static Context sContext;
-    public static String sDownloadSDPath;
-    public static int sUpdateIcon;
+    public static AUConfig sAUConfig;
 
     /**
-     * config the download path and notification icon
+     * config
      *
-     * @param context context
-     * @param downloadSDPath downloadSDPath
-     * @param updateIcon updateIcon
+     * @param auConfig AUConfig
      */
-    public static void init(Context context, String downloadSDPath, int updateIcon) {
-        sContext = context;
-        sDownloadSDPath = downloadSDPath;
-        sUpdateIcon = updateIcon;
+    public static void init(AUConfig auConfig) {
+        sAUConfig = auConfig;
     }
 
     /**
@@ -56,7 +52,7 @@ public final class AU {
      * @return return
      */
     public static boolean hasUpdate(int vercode) {
-        if (vercode <= AUUtils.vercode(sContext)) {
+        if (vercode <= AUUtils.vercode(sAUConfig.getContext())) {
             return false;
         }
         return true;
@@ -153,6 +149,31 @@ public final class AU {
         final Activity activity = AUUtils.getActivityFromContext(context);
 
         final AUCornerCenterDialog updateDialog = new AUCornerCenterDialog(activity);
+        updateDialog.setTitle(context.getString(R.string.au_download_dialog_title) + vername);
+        updateDialog.setContent(log);
+        updateDialog.setConfirmOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!TextUtils.isEmpty(download)) {
+                    download(activity, download);
+                    updateDialog.dismiss();
+                }
+            }
+        });
+
+        if (!activity.isFinishing()) {
+            updateDialog.show();
+        }
+    }
+
+    public static void showCornerBottom(final Context context,
+                                        final int vercode,
+                                        final String vername,
+                                        final String download,
+                                        final String log) {
+        final Activity activity = AUUtils.getActivityFromContext(context);
+
+        final AUCornerBottomDialog updateDialog = new AUCornerBottomDialog(activity);
         updateDialog.setTitle(context.getString(R.string.au_download_dialog_title) + vername);
         updateDialog.setContent(log);
         updateDialog.setConfirmOnClickListener(new View.OnClickListener() {

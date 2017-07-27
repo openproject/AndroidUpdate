@@ -131,10 +131,10 @@ public class AUService extends Service {
         }
 
         mDownloadUrl = intent.getStringExtra(AU.KEY_DOWNLOAD_URL);
-        if (TextUtils.isEmpty(AU.sDownloadSDPath)) {
+        if (TextUtils.isEmpty(AU.sAUConfig.getDownloadSDPath())) {
             mDownloadSDPath = getPackageName() + "/download";
         } else {
-            mDownloadSDPath = AU.sDownloadSDPath;
+            mDownloadSDPath = AU.sAUConfig.getDownloadSDPath();
         }
 
         if (TextUtils.isEmpty(mDownloadUrl)) {
@@ -164,7 +164,7 @@ public class AUService extends Service {
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotificationBuilder = new NotificationCompat.Builder(this);
 
-        mNotificationBuilder.setSmallIcon(AU.sUpdateIcon != 0 ? AU.sUpdateIcon : R.drawable.au_android_update_icon);
+        mNotificationBuilder.setSmallIcon(AU.sAUConfig.getUpdateIcon() != 0 ? AU.sAUConfig.getUpdateIcon() : R.drawable.au_android_update_icon);
         mNotificationBuilder.setContentTitle(mAppName);
         mNotificationBuilder.setContentText(getString(R.string.au_download_start));
         mNotificationBuilder.setProgress(100, 0, false);
