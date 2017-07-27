@@ -6,7 +6,7 @@ the best android check update library!
 ## Gradle
 
 ```groovy
-compile('com.jayfeng:update:2.0');
+compile('com.jayfeng:android-update:2.2');
 ```
 
 ## Overview

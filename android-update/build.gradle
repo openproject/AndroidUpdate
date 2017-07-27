@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
-version = "2.1.1"                                                              // #CONFIG# // project version
+version = "2.2"                                                              // #CONFIG# // project version
 
 android {
     compileSdkVersion 26
@@ -99,7 +99,7 @@ bintray {
     configurations = ['archives']
     pkg {
         repo = "maven"
-        name = "update"                                                 // #CONFIG# project name in jcenter
+        name = "android-update"                                                 // #CONFIG# project name in jcenter
         websiteUrl = siteUrl
         vcsUrl = gitUrl
         licenses = ["Apache-2.0"]
