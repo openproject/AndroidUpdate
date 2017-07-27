@@ -7,6 +7,7 @@ public class AUConfig {
     public Context context;
     public String downloadSDPath;
     public int updateIcon;
+    public boolean downloadWhenCacel = false; // Only valid for wifi network
 
     public Context getContext() {
         return context;
@@ -30,5 +31,13 @@ public class AUConfig {
 
     public void setUpdateIcon(int updateIcon) {
         this.updateIcon = updateIcon;
+    }
+
+    public boolean isDownloadWhenCacel() {
+        return downloadWhenCacel;
+    }
+
+    public void setDownloadWhenCacel(boolean downloadWhenCacel) {
+        this.downloadWhenCacel = downloadWhenCacel;
     }
 }

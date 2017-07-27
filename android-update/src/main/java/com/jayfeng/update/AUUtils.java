@@ -7,6 +7,9 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.telephony.TelephonyManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -81,5 +84,29 @@ public class AUUtils {
 
     public static int dp2px(float dp) {
         return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+    }
+
+    public static boolean isWifi(Context context) {
+        ConnectivityManager manager = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo info = manager.getActiveNetworkInfo();
+
+        if (info == null || !info.isConnected()) {
+            return false;
+        }
+
+        int type = info.getType();
+        if (type == ConnectivityManager.TYPE_WIFI) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static boolean isSilentDownload(Context context) {
+        if (AU.sAUConfig.isDownloadWhenCacel() && AUUtils.isWifi(context)) {
+            return true;
+        }
+        return false;
     }
 }

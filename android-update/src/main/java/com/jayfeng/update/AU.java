@@ -65,9 +65,10 @@ public final class AU {
      * @param context context
      * @param download download
      */
-    public static void download(Context context, String download) {
+    public static void download(Context context, String download, boolean showUI) {
         Intent intent = new Intent(context, AUService.class);
         intent.putExtra(KEY_DOWNLOAD_URL, download);
+        intent.putExtra(AUService.KEY_SHOW_UI, showUI);
         context.startService(intent);
     }
 
@@ -116,7 +117,12 @@ public final class AU {
         new AlertDialog.Builder(context)
                 .setTitle(context.getString(R.string.au_download_dialog_title) + vername)
                 .setMessage(log)
-                .setNegativeButton(android.R.string.cancel, null)
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        auCancel(context, dialogInterface, download);
+                    }
+                })
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -127,7 +133,7 @@ public final class AU {
                                 .callback(new PermissionListener() {
                                     @Override
                                     public void onSucceed(int requestCode, List<String> grantPermissions) {
-                                        download(context, download);
+                                        download(context, download, true);
                                     }
 
                                     @Override
@@ -144,7 +150,7 @@ public final class AU {
                 }).show();
     }
 
-    public static void showCornerCenter(final Context context,
+    private static void showCornerCenter(final Context context,
                                          final int vercode,
                                          final String vername,
                                          final String download,
@@ -158,9 +164,15 @@ public final class AU {
             @Override
             public void onClick(View v) {
                 if (!TextUtils.isEmpty(download)) {
-                    download(activity, download);
+                    download(activity, download, true);
                     updateDialog.dismiss();
                 }
+            }
+        });
+        updateDialog.setCancelOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                auCancel(context, updateDialog, download);
             }
         });
 
@@ -169,7 +181,7 @@ public final class AU {
         }
     }
 
-    public static void showCornerBottom(final Context context,
+    private static void showCornerBottom(final Context context,
                                         final int vercode,
                                         final String vername,
                                         final String download,
@@ -183,14 +195,31 @@ public final class AU {
             @Override
             public void onClick(View v) {
                 if (!TextUtils.isEmpty(download)) {
-                    download(activity, download);
+                    download(activity, download, true);
                     updateDialog.dismiss();
                 }
+            }
+        });
+        updateDialog.setCancelOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                auCancel(context, updateDialog, download);
             }
         });
 
         if (!activity.isFinishing()) {
             updateDialog.show();
+        }
+    }
+
+    private static void auCancel(Context context, DialogInterface dialog, String download) {
+        if (AUUtils.isSilentDownload(context)) {
+            if (!TextUtils.isEmpty(download)) {
+                download(context, download, false);
+                dialog.dismiss();
+            }
+        } else {
+            dialog.dismiss();
         }
     }
 }

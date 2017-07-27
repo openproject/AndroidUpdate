@@ -27,7 +27,9 @@ import java.net.URLEncoder;
  */
 public class AUService extends Service {
 
-    public static final String TAG = "UpdateService";
+    public static final String TAG = "AUService";
+
+    public static final String KEY_SHOW_UI = "show";
 
     private static final int DOWNLOAD_STATE_FAILURE = -1;
     private static final int DOWNLOAD_STATE_SUCCESS = 0;
@@ -48,6 +50,7 @@ public class AUService extends Service {
     private File mDestFile;
 
     private boolean mIsDownloading = false;
+    private boolean mIsShowUI = false;
 
     private String mAppName = "";
 
@@ -56,27 +59,41 @@ public class AUService extends Service {
         public boolean handleMessage(Message msg) {
             switch (msg.what) {
                 case DOWNLOAD_STATE_SUCCESS:
-                    Toast.makeText(getApplicationContext(), R.string.au_download_success, Toast.LENGTH_LONG).show();
-                    install(mDestFile);
+                    if (mIsShowUI) {
+                        Toast.makeText(getApplicationContext(), R.string.au_download_success, Toast.LENGTH_LONG).show();
+                        install(mDestFile);
+                    }
                     break;
                 case DOWNLOAD_STATE_FAILURE:
-                    Toast.makeText(getApplicationContext(), R.string.au_download_failure, Toast.LENGTH_LONG).show();
+                    if (mIsShowUI) {
+                        Toast.makeText(getApplicationContext(), R.string.au_download_failure, Toast.LENGTH_LONG).show();
+                    }
                     mNotificationManager.cancel(NOTIFICATION_ID);
                     break;
                 case DOWNLOAD_STATE_START:
-                    Toast.makeText(getApplicationContext(), R.string.au_download_start, Toast.LENGTH_LONG).show();
+                    if (mIsShowUI) {
+                        Toast.makeText(getApplicationContext(), R.string.au_download_start, Toast.LENGTH_LONG).show();
+                    }
                     break;
                 case DOWNLOAD_STATE_INSTALL:
-                    Toast.makeText(getApplicationContext(), R.string.au_download_install, Toast.LENGTH_LONG).show();
+                    if (mIsShowUI) {
+                        Toast.makeText(getApplicationContext(), R.string.au_download_install, Toast.LENGTH_LONG).show();
+                    }
                     break;
                 case DOWNLOAD_STATE_ERROR_SDCARD:
-                    Toast.makeText(getApplicationContext(), R.string.au_download_error_sdcard, Toast.LENGTH_LONG).show();
+                    if (mIsShowUI) {
+                        Toast.makeText(getApplicationContext(), R.string.au_download_error_sdcard, Toast.LENGTH_LONG).show();
+                    }
                     break;
                 case DOWNLOAD_STATE_ERROR_URL:
-                    Toast.makeText(getApplicationContext(), R.string.au_download_error_url, Toast.LENGTH_LONG).show();
+                    if (mIsShowUI) {
+                        Toast.makeText(getApplicationContext(), R.string.au_download_error_url, Toast.LENGTH_LONG).show();
+                    }
                     break;
                 case DOWNLOAD_STATE_ERROR_FILE:
-                    Toast.makeText(getApplicationContext(), R.string.au_download_error_file, Toast.LENGTH_LONG).show();
+                    if (mIsShowUI) {
+                        Toast.makeText(getApplicationContext(), R.string.au_download_error_file, Toast.LENGTH_LONG).show();
+                    }
                     mNotificationManager.cancel(NOTIFICATION_ID);
                     break;
                 default:
@@ -102,7 +119,11 @@ public class AUService extends Service {
                 mNotificationBuilder.setProgress(100, progress, false);
                 mNotificationBuilder.setContentText(getString(R.string.au_download_ongoing) + progress + "%");
                 Log.d(TAG, "apk downloading progress:" + progress + "");
-                mNotificationManager.notify(NOTIFICATION_ID, mNotificationBuilder.build());
+
+                if (mIsShowUI) {
+                    mNotificationManager.notify(NOTIFICATION_ID, mNotificationBuilder.build());
+                }
+
             }
         }
 
@@ -111,7 +132,9 @@ public class AUService extends Service {
             mNotificationBuilder.setContentText(getString(R.string.au_download_notification_success));
             mNotificationBuilder.setProgress(0, 0, false);
             mNotificationBuilder.setDefaults(Notification.DEFAULT_ALL);
-            mNotificationManager.notify(NOTIFICATION_ID, mNotificationBuilder.build());
+            if (mIsShowUI) {
+                mNotificationManager.notify(NOTIFICATION_ID, mNotificationBuilder.build());
+            }
             if (mDestFile.exists() && mDestFile.isFile() && checkApkFile(mDestFile.getPath())) {
                 Message msg = mHandler.obtainMessage();
                 msg.what = DOWNLOAD_STATE_SUCCESS;
@@ -124,9 +147,13 @@ public class AUService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
+        mIsShowUI = intent.getBooleanExtra(KEY_SHOW_UI, false);
+
         // check downloading state
         if (mIsDownloading) {
-            Toast.makeText(this, R.string.au_download_downloading, Toast.LENGTH_SHORT).show();
+            if (mIsShowUI) {
+                Toast.makeText(this, R.string.au_download_downloading, Toast.LENGTH_SHORT).show();
+            }
             return super.onStartCommand(intent, flags, startId);
         }
 
@@ -148,8 +175,10 @@ public class AUService extends Service {
                 File destFile = new File(mDestDir.getPath() + "/" + URLEncoder.encode(mDownloadUrl));
                 if (destFile.exists() && destFile.isFile() && checkApkFile(destFile.getPath())) {
 
-                    sendMessage(DOWNLOAD_STATE_INSTALL);
-                    install(destFile);
+                    if (mIsShowUI) {
+                        sendMessage(DOWNLOAD_STATE_INSTALL);
+                        install(destFile);
+                    }
                     stopSelf();
                     return super.onStartCommand(intent, Service.START_FLAG_REDELIVERY, startId);
                 }
@@ -178,7 +207,9 @@ public class AUService extends Service {
         mNotificationBuilder.setContentIntent(mPendingIntent);
 
         mNotificationManager.cancel(NOTIFICATION_ID);
-        mNotificationManager.notify(NOTIFICATION_ID, mNotificationBuilder.build());
+        if (mIsShowUI) {
+            mNotificationManager.notify(NOTIFICATION_ID, mNotificationBuilder.build());
+        }
 
         // start the download thread
         new UpdateThread().start();
@@ -280,8 +311,10 @@ public class AUService extends Service {
             if (mDestFile.exists()
                     && mDestFile.isFile()
                     && checkApkFile(mDestFile.getPath())) {
-                sendMessage(DOWNLOAD_STATE_INSTALL);
-                install(mDestFile);
+                if (mIsShowUI) {
+                    sendMessage(DOWNLOAD_STATE_INSTALL);
+                    install(mDestFile);
+                }
             } else {
                 try {
                     sendMessage(DOWNLOAD_STATE_START);

@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         AUConfig auConfig = new AUConfig();
         auConfig.setContext(getApplicationContext());
         auConfig.setUpdateIcon(R.mipmap.ic_launcher);
+        auConfig.setDownloadWhenCacel(true);
         AU.init(auConfig);
     }
 
