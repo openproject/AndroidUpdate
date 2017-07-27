@@ -4,7 +4,7 @@
     <application>
         <service android:name="com.jayfeng.update.UpdateService" />
         <provider
-            android:authorities="@string/less_provider_file_authorities"
+            android:authorities="@string/au_provider_file_authorities"
             android:name="android.support.v4.content.FileProvider"
             android:grantUriPermissions="true"
             android:exported="false">

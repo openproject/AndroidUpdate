@@ -3,42 +3,42 @@
 
     <item android:state_checked="true" android:state_focused="true">
         <shape>
-            <solid android:color="@color/app_item_bg_color_pressed" />
+            <solid android:color="@color/au_item_bg_color_pressed" />
             <corners android:bottomLeftRadius="0dp" android:bottomRightRadius="8dp" android:topLeftRadius="0dp" android:topRightRadius="0dp" />
         </shape>
     </item>
 
     <item android:state_focused="true">
         <shape>
-            <solid android:color="@color/app_item_bg_color_pressed" />
+            <solid android:color="@color/au_item_bg_color_pressed" />
             <corners android:bottomLeftRadius="0dp" android:bottomRightRadius="8dp" android:topLeftRadius="0dp" android:topRightRadius="0dp" />
         </shape>
     </item>
 
     <item android:state_selected="true">
         <shape>
-            <solid android:color="@color/app_item_bg_color_pressed" />
+            <solid android:color="@color/au_item_bg_color_pressed" />
             <corners android:bottomLeftRadius="0dp" android:bottomRightRadius="8dp" android:topLeftRadius="0dp" android:topRightRadius="0dp" />
         </shape>
     </item>
 
     <item android:state_checked="true">
         <shape>
-            <solid android:color="@color/app_item_bg_color_pressed" />
+            <solid android:color="@color/au_item_bg_color_pressed" />
             <corners android:bottomLeftRadius="0dp" android:bottomRightRadius="8dp" android:topLeftRadius="0dp" android:topRightRadius="0dp" />
         </shape>
     </item>
 
     <item android:state_pressed="true">
         <shape>
-            <solid android:color="@color/app_item_bg_color_pressed" />
+            <solid android:color="@color/au_item_bg_color_pressed" />
             <corners android:bottomLeftRadius="0dp" android:bottomRightRadius="8dp" android:topLeftRadius="0dp" android:topRightRadius="0dp" />
         </shape>
     </item>
 
     <item>
         <shape>
-            <solid android:color="@color/app_item_bg_color" />
+            <solid android:color="@color/au_item_bg_color" />
             <corners android:bottomLeftRadius="0dp" android:bottomRightRadius="8dp" android:topLeftRadius="0dp" android:topRightRadius="0dp" />
         </shape>
     </item>

@@ -115,7 +115,7 @@ public final class UpdateManager {
 
         // if has update, show to dialog with update log
         new AlertDialog.Builder(context)
-                .setTitle(context.getString(R.string.less_app_download_dialog_title) + vername)
+                .setTitle(context.getString(R.string.au_download_dialog_title) + vername)
                 .setMessage(log)
                 .setNegativeButton(android.R.string.cancel, null)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -135,9 +135,9 @@ public final class UpdateManager {
                                     public void onFailed(int requestCode, List<String> deniedPermissions) {
                                         Activity activity = Utils.getActivityFromContext(context);
                                         AndPermission.defaultSettingDialog(activity, REQUEST_CODE)
-                                                .setTitle(context.getString(R.string.permission_deny_title))
-                                                .setMessage(context.getString(R.string.permission_deny_message))
-                                                .setPositiveButton(context.getString(R.string.permission_deny_ok))
+                                                .setTitle(context.getString(R.string.au_permission_deny_title))
+                                                .setMessage(context.getString(R.string.au_permission_deny_message))
+                                                .setPositiveButton(context.getString(R.string.au_permission_deny_ok))
                                                 .show();
                                     }
                                 }).start();
@@ -153,7 +153,7 @@ public final class UpdateManager {
         final Activity activity = Utils.getActivityFromContext(context);
 
         final CornerCenterDialog updateDialog = new CornerCenterDialog(activity);
-        updateDialog.setTitle(context.getString(R.string.less_app_download_dialog_title) + vername);
+        updateDialog.setTitle(context.getString(R.string.au_download_dialog_title) + vername);
         updateDialog.setContent(log);
         updateDialog.setConfirmOnClickListener(new View.OnClickListener() {
             @Override

@@ -24,7 +24,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="8dp"
-            android:text="@string/less_app_download_dialog_title"
+            android:text="@string/au_download_dialog_title"
             android:textColor="#3f3f3f"
             android:textSize="17sp" />
 
@@ -42,7 +42,7 @@
 
         <View android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/app_item_divider_color"/>
+            android:background="@color/au_item_divider_color"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -66,7 +66,7 @@
                 android:id="@+id/button_divider"
                 android:layout_width="1px"
                 android:layout_height="match_parent"
-                android:background="@color/app_item_divider_color" />
+                android:background="@color/au_item_divider_color" />
 
             <Button
                 android:id="@+id/confirm"

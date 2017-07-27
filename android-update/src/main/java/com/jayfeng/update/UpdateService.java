@@ -56,27 +56,27 @@ public class UpdateService extends Service {
         public boolean handleMessage(Message msg) {
             switch (msg.what) {
                 case DOWNLOAD_STATE_SUCCESS:
-                    Toast.makeText(getApplicationContext(), R.string.less_app_download_success, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.au_download_success, Toast.LENGTH_LONG).show();
                     install(mDestFile);
                     break;
                 case DOWNLOAD_STATE_FAILURE:
-                    Toast.makeText(getApplicationContext(), R.string.less_app_download_failure, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.au_download_failure, Toast.LENGTH_LONG).show();
                     mNotificationManager.cancel(NOTIFICATION_ID);
                     break;
                 case DOWNLOAD_STATE_START:
-                    Toast.makeText(getApplicationContext(), R.string.less_app_download_start, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.au_download_start, Toast.LENGTH_LONG).show();
                     break;
                 case DOWNLOAD_STATE_INSTALL:
-                    Toast.makeText(getApplicationContext(), R.string.less_app_download_install, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.au_download_install, Toast.LENGTH_LONG).show();
                     break;
                 case DOWNLOAD_STATE_ERROR_SDCARD:
-                    Toast.makeText(getApplicationContext(), R.string.less_app_download_error_sdcard, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.au_download_error_sdcard, Toast.LENGTH_LONG).show();
                     break;
                 case DOWNLOAD_STATE_ERROR_URL:
-                    Toast.makeText(getApplicationContext(), R.string.less_app_download_error_url, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.au_download_error_url, Toast.LENGTH_LONG).show();
                     break;
                 case DOWNLOAD_STATE_ERROR_FILE:
-                    Toast.makeText(getApplicationContext(), R.string.less_app_download_error_file, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.au_download_error_file, Toast.LENGTH_LONG).show();
                     mNotificationManager.cancel(NOTIFICATION_ID);
                     break;
                 default:
@@ -100,7 +100,7 @@ public class UpdateService extends Service {
                 mCurrentTime = System.currentTimeMillis();
                 mCurrentProgress = progress;
                 mNotificationBuilder.setProgress(100, progress, false);
-                mNotificationBuilder.setContentText(getString(R.string.less_app_download_ongoing) + progress + "%");
+                mNotificationBuilder.setContentText(getString(R.string.au_download_ongoing) + progress + "%");
                 Log.d(TAG, "apk downloading progress:" + progress + "");
                 mNotificationManager.notify(NOTIFICATION_ID, mNotificationBuilder.build());
             }
@@ -108,7 +108,7 @@ public class UpdateService extends Service {
 
         @Override
         public void onDownloaded() {
-            mNotificationBuilder.setContentText(getString(R.string.less_app_download_notification_success));
+            mNotificationBuilder.setContentText(getString(R.string.au_download_notification_success));
             mNotificationBuilder.setProgress(0, 0, false);
             mNotificationBuilder.setDefaults(Notification.DEFAULT_ALL);
             mNotificationManager.notify(NOTIFICATION_ID, mNotificationBuilder.build());
@@ -126,7 +126,7 @@ public class UpdateService extends Service {
 
         // check downloading state
         if (mIsDownloading) {
-            Toast.makeText(this, R.string.less_app_download_downloading, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.au_download_downloading, Toast.LENGTH_SHORT).show();
             return super.onStartCommand(intent, flags, startId);
         }
 
@@ -164,16 +164,16 @@ public class UpdateService extends Service {
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotificationBuilder = new NotificationCompat.Builder(this);
 
-        mNotificationBuilder.setSmallIcon(UpdateManager.sUpdateIcon != 0 ? UpdateManager.sUpdateIcon : R.drawable.less_app_update_icon);
+        mNotificationBuilder.setSmallIcon(UpdateManager.sUpdateIcon != 0 ? UpdateManager.sUpdateIcon : R.drawable.au_android_update_icon);
         mNotificationBuilder.setContentTitle(mAppName);
-        mNotificationBuilder.setContentText(getString(R.string.less_app_download_start));
+        mNotificationBuilder.setContentText(getString(R.string.au_download_start));
         mNotificationBuilder.setProgress(100, 0, false);
         mNotificationBuilder.setAutoCancel(true);
 
         Intent completingIntent = new Intent();
         completingIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         completingIntent.setClass(getApplicationContext(), UpdateService.class);
-        mPendingIntent = PendingIntent.getActivity(UpdateService.this, R.string.less_app_name, completingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        mPendingIntent = PendingIntent.getActivity(UpdateService.this, R.string.au_name, completingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         mNotificationBuilder.setContentIntent(mPendingIntent);
 
@@ -219,7 +219,7 @@ public class UpdateService extends Service {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         Uri uri = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            uri = FileProvider.getUriForFile(this, getString(R.string.less_provider_file_authorities), apkFile);
+            uri = FileProvider.getUriForFile(this, getString(R.string.au_provider_file_authorities), apkFile);
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         } else {
             uri = Uri.fromFile(apkFile);
