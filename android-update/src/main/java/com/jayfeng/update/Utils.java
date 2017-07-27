@@ -6,6 +6,7 @@ import android.content.ContextWrapper;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -76,5 +77,9 @@ public class Utils {
         }
 
         return null;
+    }
+
+    public static int dp2px(float dp) {
+        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
     }
 }

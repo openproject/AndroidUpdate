@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        UpdateManager.show(this, vercode, vername, download, log);
+        UpdateManager.showCornerCenter(this, vercode, vername, download, log);
     }
 
     private void clear() {

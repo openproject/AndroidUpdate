@@ -6,7 +6,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.text.TextUtils;
+import android.view.View;
 
+import com.jayfeng.update.ui.CornerCenterDialog;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionListener;
 
@@ -25,6 +28,9 @@ public final class UpdateManager {
 
     public static final String KEY_DOWNLOAD_URL = "download_url";
     public static final int REQUEST_CODE = 3423;
+
+    public static final int STYLE_MATERIAL_DESIGN = 1;
+    public static final int STYLE_CORNER_CENTER = 2;
 
     public static Context sContext;
     public static String sDownloadSDPath;
@@ -68,7 +74,27 @@ public final class UpdateManager {
         context.startService(intent);
     }
 
+    public static void show(final Context context,
+                            final int vercode,
+                            final String vername,
+                            final String download,
+                            final String log,
+                            final int style) {
+
+        // no update
+        if (!hasUpdate(vercode)) {
+            return;
+        }
+
+        if (style == STYLE_MATERIAL_DESIGN) {
+            show(context, vercode, vername, download, log);
+        } else if (style == STYLE_CORNER_CENTER) {
+            showCornerCenter(context, vercode, vername, download, log);
+        }
+    }
+
     /**
+     * DEFAULT MATERIAL DESIGN
      * check to update by version code
      *
      * @param context context
@@ -117,5 +143,30 @@ public final class UpdateManager {
                                 }).start();
                     }
                 }).show();
+    }
+
+    public static void showCornerCenter(final Context context,
+                                         final int vercode,
+                                         final String vername,
+                                         final String download,
+                                         final String log) {
+        final Activity activity = Utils.getActivityFromContext(context);
+
+        final CornerCenterDialog updateDialog = new CornerCenterDialog(activity);
+        updateDialog.setTitle(context.getString(R.string.less_app_download_dialog_title) + vername);
+        updateDialog.setContent(log);
+        updateDialog.setConfirmOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!TextUtils.isEmpty(download)) {
+                    download(activity, download);
+                    updateDialog.dismiss();
+                }
+            }
+        });
+
+        if (!activity.isFinishing()) {
+            updateDialog.show();
+        }
     }
 }
