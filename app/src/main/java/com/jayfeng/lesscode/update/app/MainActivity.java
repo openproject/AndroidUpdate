@@ -13,9 +13,6 @@ import com.jayfeng.lesscode.core.ViewLess;
 import com.jayfeng.update.AU;
 import com.jayfeng.update.AUConfig;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
@@ -50,11 +47,15 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * AU init - MUST
+     * Notice: downloadWhenCacel means slient download when cancel
+     * if the network is WIFI and the app has the WRITE_EXTERNAL_STORAGE permission
      */
     private void initAUConfig() {
         AUConfig auConfig = new AUConfig();
-        auConfig.setContext(getApplicationContext());
-        auConfig.setUpdateIcon(R.mipmap.ic_launcher);
+        // must
+        auConfig.setContext(getApplicationContext()); // Context
+        auConfig.setUpdateIcon(R.mipmap.ic_launcher); // Notification icon
+        // optional
         auConfig.setDownloadWhenCacel(true);
         AU.init(auConfig);
     }

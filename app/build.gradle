@@ -10,7 +10,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        resValue "string", "less_provider_file_authorities", "com.jayfeng.lesscode.update.app.fileprovider"
+        resValue "string", "au_provider_file_authorities", "com.jayfeng.update.app.fileprovider"
     }
     buildTypes {
         release {

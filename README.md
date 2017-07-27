@@ -10,18 +10,26 @@ compile('com.jayfeng:android-update:2.2');
 ```
 
 ## Overview
-> * 一键集成，代码少，简单
-> * 稳定，考虑周全，经过商业验证
-> * 兼容Android7.0+
-> * 开源
+> * simple and reliable
+> * support Android7.0+
+> * open source
 
 ## Usage
 ```groovy
-    // 自定义下载路径和通知图标
+/**
+ * AU init - MUST
+ * Notice: downloadWhenCacel means slient download when cancel
+ * if the network is WIFI and the app has the WRITE_EXTERNAL_STORAGE permission
+ */
+private void initAUConfig() {
     AUConfig auConfig = new AUConfig();
-    auConfig.setContext(getApplicationContext());
-    auConfig.setUpdateIcon(R.mipmap.ic_launcher);
+    // must
+    auConfig.setContext(getApplicationContext()); // Context
+    auConfig.setUpdateIcon(R.mipmap.ic_launcher); // Notification icon
+    // optional
+    auConfig.setDownloadWhenCacel(true);
     AU.init(auConfig);
+}
 ```
 为了兼容Android 7.0+的FileProvider，而Provider是不能冲突的，所以必须自定义这个Provider的author:
 ```groovy

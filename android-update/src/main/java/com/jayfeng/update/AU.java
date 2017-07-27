@@ -119,33 +119,14 @@ public final class AU {
                 .setMessage(log)
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        auCancel(context, dialogInterface, download);
+                    public void onClick(DialogInterface dialog, int i) {
+                        auCancel(context, dialog, download);
                     }
                 })
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
-                        AndPermission.with(context)
-                                .requestCode(REQUEST_CODE)
-                                .permission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                                .callback(new PermissionListener() {
-                                    @Override
-                                    public void onSucceed(int requestCode, List<String> grantPermissions) {
-                                        download(context, download, true);
-                                    }
-
-                                    @Override
-                                    public void onFailed(int requestCode, List<String> deniedPermissions) {
-                                        Activity activity = AUUtils.getActivityFromContext(context);
-                                        AndPermission.defaultSettingDialog(activity, REQUEST_CODE)
-                                                .setTitle(context.getString(R.string.au_permission_deny_title))
-                                                .setMessage(context.getString(R.string.au_permission_deny_message))
-                                                .setPositiveButton(context.getString(R.string.au_permission_deny_ok))
-                                                .show();
-                                    }
-                                }).start();
+                        auConfirm(context, download);
                     }
                 }).show();
     }
@@ -163,10 +144,7 @@ public final class AU {
         updateDialog.setConfirmOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!TextUtils.isEmpty(download)) {
-                    download(activity, download, true);
-                    updateDialog.dismiss();
-                }
+                auConfirm(context, download);
             }
         });
         updateDialog.setCancelOnClickListener(new View.OnClickListener() {
@@ -194,10 +172,7 @@ public final class AU {
         updateDialog.setConfirmOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!TextUtils.isEmpty(download)) {
-                    download(activity, download, true);
-                    updateDialog.dismiss();
-                }
+                auConfirm(context, download);
             }
         });
         updateDialog.setCancelOnClickListener(new View.OnClickListener() {
@@ -213,7 +188,8 @@ public final class AU {
     }
 
     private static void auCancel(Context context, DialogInterface dialog, String download) {
-        if (AUUtils.isSilentDownload(context)) {
+        if (AUUtils.isSilentDownload(context)
+                || AndPermission.hasPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             if (!TextUtils.isEmpty(download)) {
                 download(context, download, false);
                 dialog.dismiss();
@@ -221,5 +197,27 @@ public final class AU {
         } else {
             dialog.dismiss();
         }
+    }
+
+    private static void auConfirm(final Context context, final String download) {
+        AndPermission.with(context)
+                .requestCode(REQUEST_CODE)
+                .permission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .callback(new PermissionListener() {
+                    @Override
+                    public void onSucceed(int requestCode, List<String> grantPermissions) {
+                        download(context, download, true);
+                    }
+
+                    @Override
+                    public void onFailed(int requestCode, List<String> deniedPermissions) {
+                        Activity activity = AUUtils.getActivityFromContext(context);
+                        AndPermission.defaultSettingDialog(activity, REQUEST_CODE)
+                                .setTitle(context.getString(R.string.au_permission_deny_title))
+                                .setMessage(context.getString(R.string.au_permission_deny_message))
+                                .setPositiveButton(context.getString(R.string.au_permission_deny_ok))
+                                .show();
+                    }
+                }).start();
     }
 }
