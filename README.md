@@ -1,17 +1,19 @@
-[![Jcenter Status](https://api.bintray.com/packages/openproject/maven/update/images/download.svg)](https://bintray.com/openproject/maven/update)
+[![Jcenter Status](https://api.bintray.com/packages/openproject/maven/android-update/images/download.svg)](https://bintray.com/openproject/maven/android-update)
 
-# LessCode-Update
+# AU - Android Update
 the best android check update library!
 
 ## Gradle
 
 ```groovy
-compile('com.jayfeng:android-update:2.2');
+compile('com.jayfeng:android-update:2.3');
 ```
 
 ## Overview
 > * simple and reliable
 > * support Android7.0+
+> * no more need permission problem
+> * no more need dialog ui
 > * open source
 
 ## Usage
@@ -30,6 +32,21 @@ private void initAUConfig() {
     auConfig.setDownloadWhenCacel(true);
     AU.init(auConfig);
 }
+```
+
+SHOW UI:
+```java
+// 默认系统样式
+AU.show(MainActivity.this,
+        mVersion.getVercode(), mVersion.getVername(), mVersion.getDownload(), mVersion.getLog());
+// 圆角 - 中间弹出
+AU.show(MainActivity.this,
+        mVersion.getVercode(), mVersion.getVername(), mVersion.getDownload(), mVersion.getLog(),
+        AU.STYLE_CORNER_CENTER);
+// 圆角 - 底部弹出
+AU.show(MainActivity.this,
+        mVersion.getVercode(), mVersion.getVername(), mVersion.getDownload(), mVersion.getLog(),
+        AU.STYLE_CORNER_BOTTOM);
 ```
 为了兼容Android 7.0+的FileProvider，而Provider是不能冲突的，所以必须自定义这个Provider的author:
 ```groovy
