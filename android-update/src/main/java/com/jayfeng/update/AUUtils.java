@@ -16,7 +16,7 @@ import java.io.InputStreamReader;
 /**
  * Toolbox for update
  */
-public class Utils {
+public class AUUtils {
 
     public static int vercode(Context context) {
         int result = 0;

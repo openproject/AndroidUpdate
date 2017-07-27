@@ -9,7 +9,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.jayfeng.update.ui.CornerCenterDialog;
+import com.jayfeng.update.ui.AUCornerCenterDialog;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionListener;
 
@@ -24,7 +24,7 @@ import java.util.List;
  * "log":"upgrade content"
  * }
  */
-public final class UpdateManager {
+public final class AU {
 
     public static final String KEY_DOWNLOAD_URL = "download_url";
     public static final int REQUEST_CODE = 3423;
@@ -56,7 +56,7 @@ public final class UpdateManager {
      * @return return
      */
     public static boolean hasUpdate(int vercode) {
-        if (vercode <= Utils.vercode(sContext)) {
+        if (vercode <= AUUtils.vercode(sContext)) {
             return false;
         }
         return true;
@@ -69,7 +69,7 @@ public final class UpdateManager {
      * @param download download
      */
     public static void download(Context context, String download) {
-        Intent intent = new Intent(context, UpdateService.class);
+        Intent intent = new Intent(context, AUService.class);
         intent.putExtra(KEY_DOWNLOAD_URL, download);
         context.startService(intent);
     }
@@ -133,7 +133,7 @@ public final class UpdateManager {
 
                                     @Override
                                     public void onFailed(int requestCode, List<String> deniedPermissions) {
-                                        Activity activity = Utils.getActivityFromContext(context);
+                                        Activity activity = AUUtils.getActivityFromContext(context);
                                         AndPermission.defaultSettingDialog(activity, REQUEST_CODE)
                                                 .setTitle(context.getString(R.string.au_permission_deny_title))
                                                 .setMessage(context.getString(R.string.au_permission_deny_message))
@@ -150,9 +150,9 @@ public final class UpdateManager {
                                          final String vername,
                                          final String download,
                                          final String log) {
-        final Activity activity = Utils.getActivityFromContext(context);
+        final Activity activity = AUUtils.getActivityFromContext(context);
 
-        final CornerCenterDialog updateDialog = new CornerCenterDialog(activity);
+        final AUCornerCenterDialog updateDialog = new AUCornerCenterDialog(activity);
         updateDialog.setTitle(context.getString(R.string.au_download_dialog_title) + vername);
         updateDialog.setContent(log);
         updateDialog.setConfirmOnClickListener(new View.OnClickListener() {

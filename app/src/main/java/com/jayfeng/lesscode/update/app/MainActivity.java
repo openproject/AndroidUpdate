@@ -2,8 +2,6 @@ package com.jayfeng.lesscode.update.app;
 
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -12,7 +10,7 @@ import android.widget.Button;
 import com.jayfeng.lesscode.core.FileLess;
 import com.jayfeng.lesscode.core.ToastLess;
 import com.jayfeng.lesscode.core.ViewLess;
-import com.jayfeng.update.UpdateManager;
+import com.jayfeng.update.AU;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -75,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        UpdateManager.showCornerCenter(this, vercode, vername, download, log);
+        AU.showCornerCenter(this, vercode, vername, download, log);
     }
 
     private void clear() {

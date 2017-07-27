@@ -25,7 +25,7 @@ import java.net.URLEncoder;
 /**
  * update service for downloading apk
  */
-public class UpdateService extends Service {
+public class AUService extends Service {
 
     public static final String TAG = "UpdateService";
 
@@ -87,7 +87,7 @@ public class UpdateService extends Service {
     };
     private Handler mHandler = new Handler(mHandlerCallBack);
 
-    private Http.DownloadCallBack mDownloadCallBack = new Http.DownloadCallBack() {
+    private AUHttp.DownloadCallBack mDownloadCallBack = new AUHttp.DownloadCallBack() {
 
         private int NOTIFICATION_INTERVAL_MIN = 160;
         private long mCurrentTime = 0;
@@ -130,11 +130,11 @@ public class UpdateService extends Service {
             return super.onStartCommand(intent, flags, startId);
         }
 
-        mDownloadUrl = intent.getStringExtra(UpdateManager.KEY_DOWNLOAD_URL);
-        if (TextUtils.isEmpty(UpdateManager.sDownloadSDPath)) {
+        mDownloadUrl = intent.getStringExtra(AU.KEY_DOWNLOAD_URL);
+        if (TextUtils.isEmpty(AU.sDownloadSDPath)) {
             mDownloadSDPath = getPackageName() + "/download";
         } else {
-            mDownloadSDPath = UpdateManager.sDownloadSDPath;
+            mDownloadSDPath = AU.sDownloadSDPath;
         }
 
         if (TextUtils.isEmpty(mDownloadUrl)) {
@@ -159,12 +159,12 @@ public class UpdateService extends Service {
             return super.onStartCommand(intent, Service.START_FLAG_REDELIVERY, startId);
         }
 
-        mAppName = Utils.appname(this);
+        mAppName = AUUtils.appname(this);
 
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotificationBuilder = new NotificationCompat.Builder(this);
 
-        mNotificationBuilder.setSmallIcon(UpdateManager.sUpdateIcon != 0 ? UpdateManager.sUpdateIcon : R.drawable.au_android_update_icon);
+        mNotificationBuilder.setSmallIcon(AU.sUpdateIcon != 0 ? AU.sUpdateIcon : R.drawable.au_android_update_icon);
         mNotificationBuilder.setContentTitle(mAppName);
         mNotificationBuilder.setContentText(getString(R.string.au_download_start));
         mNotificationBuilder.setProgress(100, 0, false);
@@ -172,8 +172,8 @@ public class UpdateService extends Service {
 
         Intent completingIntent = new Intent();
         completingIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        completingIntent.setClass(getApplicationContext(), UpdateService.class);
-        mPendingIntent = PendingIntent.getActivity(UpdateService.this, R.string.au_name, completingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        completingIntent.setClass(getApplicationContext(), AUService.class);
+        mPendingIntent = PendingIntent.getActivity(AUService.this, R.string.au_name, completingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         mNotificationBuilder.setContentIntent(mPendingIntent);
 
@@ -286,7 +286,7 @@ public class UpdateService extends Service {
                 try {
                     sendMessage(DOWNLOAD_STATE_START);
                     mIsDownloading = true;
-                    Http.download(mDownloadUrl, mDestFile, false, mDownloadCallBack);
+                    AUHttp.download(mDownloadUrl, mDestFile, false, mDownloadCallBack);
                 } catch (Exception e) {
                     sendMessage(DOWNLOAD_STATE_FAILURE);
                     e.printStackTrace();

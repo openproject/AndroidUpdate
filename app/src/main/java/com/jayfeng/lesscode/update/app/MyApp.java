@@ -3,7 +3,7 @@ package com.jayfeng.lesscode.update.app;
 import android.app.Application;
 
 import com.jayfeng.lesscode.core.$;
-import com.jayfeng.update.UpdateManager;
+import com.jayfeng.update.AU;
 
 public class MyApp extends Application {
 
@@ -17,7 +17,7 @@ public class MyApp extends Application {
                 .build();
 
         // UpdateManager init - MUST
-        UpdateManager.init(getApplicationContext(),
+        AU.init(getApplicationContext(),
                 null, R.mipmap.ic_launcher);
     }
 }

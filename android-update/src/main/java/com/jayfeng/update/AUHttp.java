@@ -12,7 +12,7 @@ import java.net.URL;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
-public final class Http {
+public final class AUHttp {
 
     public static final int HTTP_CONNECT_TIMEOUT = 5000;
     public static final int HTTP_READ_TIMEOUT = 5000;

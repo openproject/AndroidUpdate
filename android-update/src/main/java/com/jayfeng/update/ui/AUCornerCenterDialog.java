@@ -12,9 +12,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.jayfeng.update.R;
-import com.jayfeng.update.Utils;
+import com.jayfeng.update.AUUtils;
 
-public class CornerCenterDialog extends Dialog {
+public class AUCornerCenterDialog extends Dialog {
 
     private View mBgView;
 
@@ -23,17 +23,17 @@ public class CornerCenterDialog extends Dialog {
     private Button cancelButton;
     private TextView contentView;
 
-    public CornerCenterDialog(@NonNull Context context) {
+    public AUCornerCenterDialog(@NonNull Context context) {
         super(context);
         init();
     }
 
-    public CornerCenterDialog(@NonNull Context context, @StyleRes int themeResId) {
+    public AUCornerCenterDialog(@NonNull Context context, @StyleRes int themeResId) {
         super(context, themeResId);
         init();
     }
 
-    protected CornerCenterDialog(@NonNull Context context, boolean cancelable, @Nullable OnCancelListener cancelListener) {
+    protected AUCornerCenterDialog(@NonNull Context context, boolean cancelable, @Nullable OnCancelListener cancelListener) {
         super(context, cancelable, cancelListener);
         init();
     }
@@ -97,7 +97,7 @@ public class CornerCenterDialog extends Dialog {
         super.show();
 
         getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        getWindow().getDecorView().setPadding(Utils.dp2px(4), Utils.dp2px(4), Utils.dp2px(4), Utils.dp2px(4));
+        getWindow().getDecorView().setPadding(AUUtils.dp2px(4), AUUtils.dp2px(4), AUUtils.dp2px(4), AUUtils.dp2px(4));
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         lp.height = WindowManager.LayoutParams.MATCH_PARENT;

@@ -2,7 +2,7 @@
     package="com.jayfeng.update">
 
     <application>
-        <service android:name="com.jayfeng.update.UpdateService" />
+        <service android:name="com.jayfeng.update.AUService" />
         <provider
             android:authorities="@string/au_provider_file_authorities"
             android:name="android.support.v4.content.FileProvider"
