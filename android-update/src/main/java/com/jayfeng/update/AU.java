@@ -126,7 +126,7 @@ public final class AU {
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        auConfirm(context, download);
+                        auConfirm(context, dialog, download);
                     }
                 }).show();
     }
@@ -144,7 +144,7 @@ public final class AU {
         updateDialog.setConfirmOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                auConfirm(context, download);
+                auConfirm(context, updateDialog, download);
             }
         });
         updateDialog.setCancelOnClickListener(new View.OnClickListener() {
@@ -172,7 +172,7 @@ public final class AU {
         updateDialog.setConfirmOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                auConfirm(context, download);
+                auConfirm(context, updateDialog, download);
             }
         });
         updateDialog.setCancelOnClickListener(new View.OnClickListener() {
@@ -187,7 +187,7 @@ public final class AU {
         }
     }
 
-    private static void auCancel(Context context, DialogInterface dialog, String download) {
+    public static void auCancel(Context context, DialogInterface dialog, String download) {
         if (AUUtils.isSilentDownload(context)
                 || AndPermission.hasPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             if (!TextUtils.isEmpty(download)) {
@@ -199,7 +199,7 @@ public final class AU {
         }
     }
 
-    private static void auConfirm(final Context context, final String download) {
+    public static void auConfirm(final Context context, final DialogInterface dialog, final String download) {
         AndPermission.with(context)
                 .requestCode(REQUEST_CODE)
                 .permission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -207,6 +207,7 @@ public final class AU {
                     @Override
                     public void onSucceed(int requestCode, List<String> grantPermissions) {
                         download(context, download, true);
+                        dialog.dismiss();
                     }
 
                     @Override

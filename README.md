@@ -6,7 +6,7 @@ the best android check update library!
 ## Gradle
 
 ```groovy
-compile('com.jayfeng:android-update:2.3');
+compile('com.jayfeng:android-update:2.4');
 ```
 
 ## Overview
@@ -47,6 +47,27 @@ AU.show(MainActivity.this,
 AU.show(MainActivity.this,
         mVersion.getVercode(), mVersion.getVername(), mVersion.getDownload(), mVersion.getLog(),
         AU.STYLE_CORNER_BOTTOM);
+// 自定义对话框
+if (AU.hasUpdate(version.getVersion_code())) {
+    final UpdateDialog updateDialog = new UpdateDialog(this);
+    updateDialog.setTitle("发现新版本");
+    updateDialog.setContent(version.getChange_log());
+    updateDialog.setOnOkListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            // click confirm
+            AU.auConfirm(MainActivity.this, updateDialog, version.getDownload());
+        }
+    });
+    updateDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+        @Override
+        public void onCancel(DialogInterface dialogInterface) {
+            // click cancel
+            AU.auCancel(MainActivity.this, updateDialog, version.getDownload());
+        }
+    });
+    updateDialog.show();
+}
 ```
 为了兼容Android 7.0+的FileProvider，而Provider是不能冲突的，所以必须自定义这个Provider的author:
 ```groovy
