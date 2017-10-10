@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 
@@ -96,8 +95,6 @@ public final class AU {
         updateBuilder.setMessage(log);
         updateBuilder.setPositiveButton(android.R.string.ok, null);
 
-        updateDialog = updateBuilder.create();
-
         if (!force) {
             updateBuilder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                 @Override
@@ -107,22 +104,10 @@ public final class AU {
             });
         }
 
+        updateDialog = updateBuilder.create();
 
         if (force) {
-            updateDialog.setCanceledOnTouchOutside(false);
-            updateDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
-                @Override
-                public boolean onKey(DialogInterface dialogInterface, int keyCode, KeyEvent keyEvent) {
-                    if (keyCode == KeyEvent.KEYCODE_BACK && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                        Activity activity = AUUtils.getActivityFromContext(context);
-                        if (activity != null) {
-                            activity.onBackPressed();
-                        }
-                        return true;
-                    }
-                    return false;
-                }
-            });
+            AUUtils.forceUpdateDialog(context, updateDialog);
         }
 
         updateDialog.show();

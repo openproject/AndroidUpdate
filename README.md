@@ -6,7 +6,7 @@ the best android check update library!
 ## Gradle
 
 ```groovy
-compile('com.jayfeng:android-update:2.4');
+compile('com.jayfeng:android-update:3.0');
 ```
 
 ## Overview
@@ -36,18 +36,10 @@ private void initAUConfig() {
 
 SHOW UI:
 ```java
-// 默认系统样式
+// default AlertDialog style
 AU.show(MainActivity.this,
-        mVersion.getVercode(), mVersion.getVername(), mVersion.getDownload(), mVersion.getLog());
-// 圆角 - 中间弹出
-AU.show(MainActivity.this,
-        mVersion.getVercode(), mVersion.getVername(), mVersion.getDownload(), mVersion.getLog(),
-        AU.STYLE_CORNER_CENTER);
-// 圆角 - 底部弹出
-AU.show(MainActivity.this,
-        mVersion.getVercode(), mVersion.getVername(), mVersion.getDownload(), mVersion.getLog(),
-        AU.STYLE_CORNER_BOTTOM);
-// 自定义对话框
+        mVersion.getVercode(), mVersion.getVername(), mVersion.getDownload(), mVersion.getLog(), mVersion.isForce());
+// Or, you can customize the update dialog yourself
 if (AU.hasUpdate(version.getVersion_code())) {
     final UpdateDialog updateDialog = new UpdateDialog(this);
     updateDialog.setTitle("发现新版本");

@@ -1,8 +1,10 @@
 package com.jayfeng.update;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.DialogInterface;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -10,6 +12,7 @@ import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
+import android.view.KeyEvent;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -108,5 +111,22 @@ public class AUUtils {
             return true;
         }
         return false;
+    }
+
+    public static void forceUpdateDialog(final Context context, Dialog dialog) {
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialogInterface, int keyCode, KeyEvent keyEvent) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                    Activity activity = AUUtils.getActivityFromContext(context);
+                    if (activity != null) {
+                        activity.onBackPressed();
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 }

@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private Version mVersion;
 
     private Button mCheckDefaultButton;
+    private Button mCheckDefaultWithForceButton;
 
     private Button mClearButton;
 
@@ -60,11 +61,20 @@ public class MainActivity extends AppCompatActivity {
 
     private void initViewAndListener() {
         mCheckDefaultButton = ViewLess.$(this, R.id.check_default);
+        mCheckDefaultWithForceButton = ViewLess.$(this, R.id.check_default_force);
         mClearButton = ViewLess.$(this, R.id.clear);
 
         mCheckDefaultButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                AU.show(MainActivity.this,
+                        mVersion.getVercode(), mVersion.getVername(), mVersion.getDownload(), mVersion.getLog(), false);
+            }
+        });
+
+        mCheckDefaultWithForceButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 AU.show(MainActivity.this,
                         mVersion.getVercode(), mVersion.getVername(), mVersion.getDownload(), mVersion.getLog(), true);
             }
