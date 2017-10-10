@@ -18,17 +18,8 @@
     <Button android:id="@+id/check_default"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="检查更新(默认)"/>
+        android:text="检查更新"/>
 
-    <Button android:id="@+id/check_corner_center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="检查更新(中间弹出)"/>
-
-    <Button android:id="@+id/check_corner_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="检查更新(底部弹出)"/>
 
     <Button android:id="@+id/clear"
             android:layout_width="match_parent"

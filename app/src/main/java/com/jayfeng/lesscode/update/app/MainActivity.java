@@ -20,8 +20,6 @@ public class MainActivity extends AppCompatActivity {
     private Version mVersion;
 
     private Button mCheckDefaultButton;
-    private Button mCheckCornerCenterButton;
-    private Button mCheckCornerBottomButton;
 
     private Button mClearButton;
 
@@ -62,33 +60,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void initViewAndListener() {
         mCheckDefaultButton = ViewLess.$(this, R.id.check_default);
-        mCheckCornerCenterButton = ViewLess.$(this, R.id.check_corner_center);
-        mCheckCornerBottomButton = ViewLess.$(this, R.id.check_corner_bottom);
         mClearButton = ViewLess.$(this, R.id.clear);
 
         mCheckDefaultButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AU.show(MainActivity.this,
-                        mVersion.getVercode(), mVersion.getVername(), mVersion.getDownload(), mVersion.getLog());
-            }
-        });
-
-        mCheckCornerCenterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AU.show(MainActivity.this,
-                        mVersion.getVercode(), mVersion.getVername(), mVersion.getDownload(), mVersion.getLog(),
-                        AU.STYLE_CORNER_CENTER);
-            }
-        });
-
-        mCheckCornerBottomButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AU.show(MainActivity.this,
-                        mVersion.getVercode(), mVersion.getVername(), mVersion.getDownload(), mVersion.getLog(),
-                        AU.STYLE_CORNER_BOTTOM);
+                        mVersion.getVercode(), mVersion.getVername(), mVersion.getDownload(), mVersion.getLog(), true);
             }
         });
 

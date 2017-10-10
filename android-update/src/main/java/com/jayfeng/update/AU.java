@@ -2,15 +2,15 @@ package com.jayfeng.update;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
 
-import com.jayfeng.update.ui.AUCornerBottomDialog;
-import com.jayfeng.update.ui.AUCornerCenterDialog;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionListener;
 
@@ -30,10 +30,6 @@ public final class AU {
     public static final String KEY_DOWNLOAD_URL = "download_url";
 
     public static final int REQUEST_CODE = 3423;
-
-    public static final int STYLE_MATERIAL_DESIGN = 1;
-    public static final int STYLE_CORNER_CENTER = 2;
-    public static final int STYLE_CORNER_BOTTOM = 3;
 
     public static AUConfig sAUConfig;
 
@@ -72,27 +68,6 @@ public final class AU {
         context.startService(intent);
     }
 
-    public static void show(final Context context,
-                            final int vercode,
-                            final String vername,
-                            final String download,
-                            final String log,
-                            final int style) {
-
-        // no update
-        if (!hasUpdate(vercode)) {
-            return;
-        }
-
-        if (style == STYLE_MATERIAL_DESIGN) {
-            show(context, vercode, vername, download, log);
-        } else if (style == STYLE_CORNER_CENTER) {
-            showCornerCenter(context, vercode, vername, download, log);
-        } else if (style == STYLE_CORNER_BOTTOM) {
-            showCornerBottom(context, vercode, vername, download, log);
-        }
-    }
-
     /**
      * DEFAULT MATERIAL DESIGN
      * check to update by version code
@@ -107,84 +82,57 @@ public final class AU {
                             final int vercode,
                             final String vername,
                             final String download,
-                            final String log) {
+                            final String log,
+                            final boolean force) {
         // no update
         if (!hasUpdate(vercode)) {
             return;
         }
 
         // if has update, show to dialog with update log
-        new AlertDialog.Builder(context)
-                .setTitle(context.getString(R.string.au_download_dialog_title) + vername)
-                .setMessage(log)
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int i) {
-                        auCancel(context, dialog, download);
-                    }
-                })
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        auConfirm(context, dialog, download);
-                    }
-                }).show();
-    }
+        final AlertDialog updateDialog;
+        AlertDialog.Builder updateBuilder = new AlertDialog.Builder(context);
+        updateBuilder.setTitle(context.getString(R.string.au_download_dialog_title) + vername);
+        updateBuilder.setMessage(log);
+        updateBuilder.setPositiveButton(android.R.string.ok, null);
 
-    private static void showCornerCenter(final Context context,
-                                         final int vercode,
-                                         final String vername,
-                                         final String download,
-                                         final String log) {
-        final Activity activity = AUUtils.getActivityFromContext(context);
+        updateDialog = updateBuilder.create();
 
-        final AUCornerCenterDialog updateDialog = new AUCornerCenterDialog(activity);
-        updateDialog.setTitle(context.getString(R.string.au_download_dialog_title) + vername);
-        updateDialog.setContent(log);
-        updateDialog.setConfirmOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                auConfirm(context, updateDialog, download);
-            }
-        });
-        updateDialog.setCancelOnClickListener(new View.OnClickListener() {
+        if (!force) {
+            updateBuilder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int i) {
+                    auCancel(context, dialog, download);
+                }
+            });
+        }
+
+
+        if (force) {
+            updateDialog.setCanceledOnTouchOutside(false);
+            updateDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+                @Override
+                public boolean onKey(DialogInterface dialogInterface, int keyCode, KeyEvent keyEvent) {
+                    if (keyCode == KeyEvent.KEYCODE_BACK && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                        Activity activity = AUUtils.getActivityFromContext(context);
+                        if (activity != null) {
+                            activity.onBackPressed();
+                        }
+                        return true;
+                    }
+                    return false;
+                }
+            });
+        }
+
+        updateDialog.show();
+        Button okButton = updateDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                auCancel(context, updateDialog, download);
+                auConfirm(context, updateDialog, download, force);
             }
         });
-
-        if (!activity.isFinishing()) {
-            updateDialog.show();
-        }
-    }
-
-    private static void showCornerBottom(final Context context,
-                                        final int vercode,
-                                        final String vername,
-                                        final String download,
-                                        final String log) {
-        final Activity activity = AUUtils.getActivityFromContext(context);
-
-        final AUCornerBottomDialog updateDialog = new AUCornerBottomDialog(activity);
-        updateDialog.setTitle(context.getString(R.string.au_download_dialog_title) + vername);
-        updateDialog.setContent(log);
-        updateDialog.setConfirmOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                auConfirm(context, updateDialog, download);
-            }
-        });
-        updateDialog.setCancelOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                auCancel(context, updateDialog, download);
-            }
-        });
-
-        if (!activity.isFinishing()) {
-            updateDialog.show();
-        }
     }
 
     public static void auCancel(Context context, DialogInterface dialog, String download) {
@@ -199,7 +147,7 @@ public final class AU {
         }
     }
 
-    public static void auConfirm(final Context context, final DialogInterface dialog, final String download) {
+    public static void auConfirm(final Context context, final DialogInterface dialog, final String download, final boolean force) {
         AndPermission.with(context)
                 .requestCode(REQUEST_CODE)
                 .permission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -207,7 +155,9 @@ public final class AU {
                     @Override
                     public void onSucceed(int requestCode, List<String> grantPermissions) {
                         download(context, download, true);
-                        dialog.dismiss();
+                        if (!force) {
+                            dialog.dismiss();
+                        }
                     }
 
                     @Override
