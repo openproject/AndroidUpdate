@@ -2,11 +2,11 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
-version = "3.0"                                                              // #CONFIG# // project version
+version = "3.0.1"                                                              // #CONFIG# // project version
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    buildToolsVersion "26.0.2"
 
     defaultConfig {
         minSdkVersion 15
@@ -28,8 +28,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.yanzhenjie:permission:1.0.8'
-    compile 'com.android.support:appcompat-v7:26.0.1'
-    compile 'com.android.support:design:26.0.1'
+    compile 'com.android.support:appcompat-v7:26.1.0'
 }
 
 def siteUrl = 'https://github.com/openproject/LessCode-Update'                        // #CONFIG# // project homepage
