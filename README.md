@@ -6,7 +6,7 @@ the best android check update library!
 ## Gradle
 
 ```groovy
-compile('com.jayfeng:android-update:3.0');
+compile('com.jayfeng:android-update:3.0.1');
 ```
 
 ## Overview

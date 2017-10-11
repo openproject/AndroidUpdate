@@ -31,8 +31,8 @@ dependencies {
     compile 'com.android.support:appcompat-v7:26.1.0'
 }
 
-def siteUrl = 'https://github.com/openproject/LessCode-Update'                        // #CONFIG# // project homepage
-def gitUrl = 'https://github.com/openproject/LessCode-Update.git'                     // #CONFIG# // project git
+def siteUrl = 'https://github.com/openproject/AndroidUpdate'                        // #CONFIG# // project homepage
+def gitUrl = 'https://github.com/openproject/AndroidUpdate.git'                     // #CONFIG# // project git
 group = "com.jayfeng"                                                                 // #CONFIG# // Maven Group ID for the artifact (pageckage name is ok)
 
 install {
