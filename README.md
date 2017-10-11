@@ -39,7 +39,7 @@ SHOW UI:
 // default AlertDialog style
 AU.show(MainActivity.this,
         mVersion.getVercode(), mVersion.getVername(), mVersion.getDownload(), mVersion.getLog(), mVersion.isForce());
-// Or, you can customize the update dialog yourself
+// or, you can customize the update dialog yourself
 if (AU.hasUpdate(version.getVersion_code())) {
     final UpdateDialog updateDialog = new UpdateDialog(this);
     updateDialog.setTitle("发现新版本");
@@ -48,7 +48,7 @@ if (AU.hasUpdate(version.getVersion_code())) {
         @Override
         public void onClick(View view) {
             // click confirm
-            AU.auConfirm(MainActivity.this, updateDialog, version.getDownload());
+            AU.auConfirm(MainActivity.this, updateDialog, version.getDownload(), version.getForce());
         }
     });
     updateDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
