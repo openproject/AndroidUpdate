@@ -1,5 +1,6 @@
 package com.jayfeng.lesscode.update.app;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button mCheckDefaultButton;
     private Button mCheckDefaultWithForceButton;
+    private Button mCheckCustomWithForceButton;
 
     private Button mClearButton;
 
@@ -62,21 +64,32 @@ public class MainActivity extends AppCompatActivity {
     private void initViewAndListener() {
         mCheckDefaultButton = ViewLess.$(this, R.id.check_default);
         mCheckDefaultWithForceButton = ViewLess.$(this, R.id.check_default_force);
+        mCheckCustomWithForceButton = ViewLess.$(this, R.id.check_custom_force);
         mClearButton = ViewLess.$(this, R.id.clear);
 
         mCheckDefaultButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mVersion.setForce(0);
                 AU.show(MainActivity.this,
-                        mVersion.getVercode(), mVersion.getVername(), mVersion.getDownload(), mVersion.getLog(), false);
+                        mVersion.getVercode(), mVersion.getVername(), mVersion.getDownload(), mVersion.getLog(), mVersion.getForce() == 1);
             }
         });
 
         mCheckDefaultWithForceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mVersion.setForce(1);
                 AU.show(MainActivity.this,
-                        mVersion.getVercode(), mVersion.getVername(), mVersion.getDownload(), mVersion.getLog(), true);
+                        mVersion.getVercode(), mVersion.getVername(), mVersion.getDownload(), mVersion.getLog(), mVersion.getForce() == 1);
+            }
+        });
+
+        mCheckCustomWithForceButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mVersion.setForce(1);
+                CustomDialog.showCustomUpdateDialog(MainActivity.this, mVersion, false);
             }
         });
 

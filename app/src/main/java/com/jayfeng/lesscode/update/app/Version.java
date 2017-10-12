@@ -6,6 +6,7 @@ public class Version {
     private String vername = "";
     private String log = "";
     private String download = null;
+    private int force = 0;
 
     public int getVercode() {
         return vercode;
@@ -37,5 +38,13 @@ public class Version {
 
     public void setDownload(String download) {
         this.download = download;
+    }
+
+    public int getForce() {
+        return force;
+    }
+
+    public void setForce(int force) {
+        this.force = force;
     }
 }

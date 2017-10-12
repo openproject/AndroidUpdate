@@ -25,6 +25,11 @@
         android:layout_height="wrap_content"
         android:text="检查更新（强制更新）"/>
 
+    <Button android:id="@+id/check_custom_force"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="检查更新（自定义对话框 + 强制更新）"/>
+
     <Button android:id="@+id/clear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
