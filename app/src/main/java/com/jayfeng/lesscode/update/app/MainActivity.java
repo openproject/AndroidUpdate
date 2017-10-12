@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mVersion.setForce(1);
-                CustomDialog.showCustomUpdateDialog(MainActivity.this, mVersion, false);
+                CustomDialog.showCustomUpdateDialog(MainActivity.this, mVersion);
             }
         });
 

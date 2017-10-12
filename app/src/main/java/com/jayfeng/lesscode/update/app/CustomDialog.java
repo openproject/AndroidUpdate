@@ -81,9 +81,9 @@ public class CustomDialog extends Dialog {
         getWindow().setAttributes(lp);
     }
 
-    public static void showCustomUpdateDialog(final Context context, final Version version, boolean noForce) {
+    public static void showCustomUpdateDialog(final Context context, final Version version) {
 
-        final boolean isForce = !noForce && version.getForce() == 1;
+        final boolean isForce = version.getForce() == 1;
         final CustomDialog updateDialog = new CustomDialog(context);
 
         updateDialog.setTitle("发现新版本：" + version.getVername());

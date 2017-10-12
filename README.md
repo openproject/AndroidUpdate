@@ -13,10 +13,9 @@ compile('com.jayfeng:android-update:3.0.1');
 
 ## Overview
 > * simple and reliable
-> * support Android7.0+
+> * support Android 7.0+
 > * no more need permission problem
-> * no more need dialog ui
-> * open source
+> * customize dialog ui
 
 ## Usage
 ```groovy
