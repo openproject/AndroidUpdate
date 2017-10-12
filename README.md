@@ -3,6 +3,8 @@
 # AU - Android Update
 the best android check update library!
 
+![Screenshot](art/demo.png)
+
 ## Gradle
 
 ```groovy
