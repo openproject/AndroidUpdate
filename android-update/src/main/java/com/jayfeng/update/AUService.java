@@ -147,8 +147,8 @@ public class AUService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        if (intent != null) {
-            mIsShowUI = intent.getBooleanExtra(KEY_SHOW_UI, false);
+        if (intent == null) {
+            return super.onStartCommand(intent, flags, startId);
         }
 
         // check downloading state
