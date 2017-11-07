@@ -149,8 +149,9 @@ public class AUService extends Service {
 
         if (intent == null) {
             return super.onStartCommand(intent, flags, startId);
+        } else {
+            mIsShowUI = intent.getBooleanExtra(KEY_SHOW_UI, false);
         }
-
         // check downloading state
         if (mIsDownloading) {
             if (mIsShowUI) {
